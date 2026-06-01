@@ -36,8 +36,7 @@
 
         </rollingPolicy>
     </appender>
-
-    <!-- Custom Application Logger -->
+    
     <logger name="tracklogger"
             level="INFO"
             additivity="false">
