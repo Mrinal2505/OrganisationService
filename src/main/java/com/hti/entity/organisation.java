@@ -13,7 +13,13 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "organisation")
+@Table(name = "organisation",
+uniqueConstraints = {
+    @UniqueConstraint(name = "uk_org_email",  columnNames = "email"),
+    @UniqueConstraint(name = "uk_org_domain", columnNames = "domain"),
+    @UniqueConstraint(name = "uk_org_reg_no", columnNames = "company_registration_number")
+}
+)
 public class organisation {
 
     @Id

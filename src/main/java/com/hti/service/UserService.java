@@ -6,12 +6,13 @@ import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 
 import com.hti.request.UserRequest;
+import com.hti.request.UserUpdateRequest;
 
 public interface UserService {
 
     ResponseEntity<?> create(UserRequest request);
 
-    ResponseEntity<?> update(UUID id, UserRequest request);
+    ResponseEntity<?> update(UUID id, UserUpdateRequest request);
 
     ResponseEntity<?> delete(UUID id);
 

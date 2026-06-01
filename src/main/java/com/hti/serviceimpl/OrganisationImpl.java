@@ -46,6 +46,14 @@ public class OrganisationImpl implements OrganisationService {
             throw new BadRequestException("Organisation with email '" + request.getEmail() + "' already exists");
         }
 
+        if (request.getDomain() != null && repository.existsByDomain(request.getDomain()))
+            throw new BadRequestException("Organisation with domain '" + request.getDomain() + "' already exists");
+
+        if (request.getCompanyRegistrationNumber() != null &&
+            repository.existsByCompanyRegistrationNumber(request.getCompanyRegistrationNumber()))
+            throw new BadRequestException("Organisation with registration number '" +
+                    request.getCompanyRegistrationNumber() + "' already exists");
+
         try {
             organisation org = organisation.builder()
                     .organizationName(request.getOrganizationName())

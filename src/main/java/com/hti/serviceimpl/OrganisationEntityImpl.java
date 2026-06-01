@@ -40,7 +40,6 @@ public class OrganisationEntityImpl implements OrganisationEntityService {
     @Override
     public ResponseEntity<?> create(OrganisationEntityRequest request) {
         logger.info("Creating entity | type={} orgId={}", request.getEntityType(), request.getOrganisationId());
-
         try {
             OrganisationEntity entity = OrganisationEntity.builder()
                     .organisationId(request.getOrganisationId())
@@ -48,11 +47,9 @@ public class OrganisationEntityImpl implements OrganisationEntityService {
                     .priority(request.getPriority())
                     .attributes(request.getAttributes())
                     .build();
-
             entity = repository.save(entity);
             logger.info("Entity created successfully | id={} type={}", entity.getId(), entity.getEntityType());
             return ResponseEntity.status(HttpStatus.CREATED).body(toResponse(entity));
-
         } catch (Exception ex) {
             logger.error("Error creating entity | type={}", request.getEntityType(), ex);
             throw new InternalServerException("Failed to create entity: " + ex.getMessage());
@@ -72,11 +69,9 @@ public class OrganisationEntityImpl implements OrganisationEntityService {
             entity.setEntityType(request.getEntityType());
             entity.setPriority(request.getPriority());
             entity.setAttributes(request.getAttributes());
-
             entity = repository.save(entity);
             logger.info("Entity updated successfully | id={}", entity.getId());
             return ResponseEntity.ok(toResponse(entity));
-
         } catch (Exception ex) {
             logger.error("Error updating entity | id={}", id, ex);
             throw new InternalServerException("Failed to update entity: " + ex.getMessage());
@@ -86,17 +81,14 @@ public class OrganisationEntityImpl implements OrganisationEntityService {
     @Override
     public ResponseEntity<?> delete(UUID id) {
         logger.info("Deleting entity | id={}", id);
-
         if (!repository.existsById(id)) {
             logger.error("Entity not found | id={}", id);
             throw new NotFoundException("Entity not found: " + id);
         }
-
         try {
             repository.deleteById(id);
             logger.info("Entity deleted successfully | id={}", id);
             return ResponseEntity.ok("Entity deleted successfully");
-
         } catch (Exception ex) {
             logger.error("Error deleting entity | id={}", id, ex);
             throw new InternalServerException("Failed to delete entity: " + ex.getMessage());

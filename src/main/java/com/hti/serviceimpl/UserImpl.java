@@ -22,6 +22,7 @@ import com.hti.exception.BadRequestException;
 import com.hti.exception.InternalServerException;
 import com.hti.exception.NotFoundException;
 import com.hti.request.UserRequest;
+import com.hti.request.UserUpdateRequest;
 import com.hti.response.PaginatedResponse;
 import com.hti.response.UserResponse;
 import com.hti.service.UserService;
@@ -55,6 +56,8 @@ public class UserImpl implements UserService {
                     .password(request.getPassword())
                     .organisationId(request.getOrganisationId())
                     .entityId(request.getEntityId())
+                    .role(request.getRole())       
+                    .status(request.getStatus()) 
                     .build();
 
             user = repository.save(user);
@@ -69,31 +72,41 @@ public class UserImpl implements UserService {
         }
     }
 
-    @Override
-    public ResponseEntity<?> update(UUID id, UserRequest request) {
-        logger.info("Updating user | id={}", id);
+  @Override
+public ResponseEntity<?> update(UUID id, UserUpdateRequest request) {
+    logger.info("Updating user | id={}", id);
 
-        User user = repository.findById(id)
-                .orElseThrow(() -> {
-                    logger.error("User not found | id={}", id);
-                    return new NotFoundException("User not found: " + id);
-                });
+    User user = repository.findById(id)
+            .orElseThrow(() -> {
+                logger.error("User not found | id={}", id);
+                return new NotFoundException("User not found: " + id);
+            });
 
-        try {
+    try {
+        if (request.getFirstName() != null)
             user.setFirstName(request.getFirstName());
+
+        if (request.getLastName() != null)
             user.setLastName(request.getLastName());
+
+        if (request.getPhone() != null)
             user.setPhone(request.getPhone());
+
+        if (request.getEntityId() != null)
             user.setEntityId(request.getEntityId());
 
-            user = repository.save(user);
-            logger.info("User updated successfully | id={}", user.getId());
-            return ResponseEntity.ok(toResponse(user));
+        if (request.getStatus() != null)
+            user.setStatus(request.getStatus());
 
-        } catch (Exception ex) {
-        	logger.error("Error updating user | id={}", id, ex);
-            throw new InternalServerException("Failed to update user: " + ex.getMessage());
-        }
+        user = repository.save(user);
+        logger.info("User updated successfully | id={}", user.getId());
+        return ResponseEntity.ok(toResponse(user));
+
+    } catch (Exception ex) {
+        logger.error("Error updating user | id={}", id, ex);
+        throw new InternalServerException("Failed to update user: " + ex.getMessage());
     }
+}
 
     @Override
     public ResponseEntity<?> delete(UUID id) {
@@ -185,7 +198,7 @@ private Specification<User> buildUserSpec(
     return (root, query, cb) -> {
         List<Predicate> predicates = new ArrayList<>();
 
-        // Fuzzy search
+      
         if (search != null && !search.isBlank()) {
             String like = "%" + search.toLowerCase() + "%";
             predicates.add(cb.or(
@@ -246,6 +259,9 @@ private Specification<User> buildUserSpec(
                 .organisationId(user.getOrganisationId())
                 .entityId(user.getEntityId())
                 .createdAt(user.getCreatedAt())
+                .role(user.getRole())              
+                .status(user.getStatus())          
+                .lastLoginAt(user.getLastLoginAt())
                 .build();
     }
 }

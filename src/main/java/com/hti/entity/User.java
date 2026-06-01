@@ -15,7 +15,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "users")
 public class User {
-
     @Id
     @GeneratedValue
     @UuidGenerator
@@ -42,6 +41,17 @@ public class User {
 
     @Column(name = "entity_id")
     private UUID entityId;
+    
+    @Column(name = "role", nullable = false)
+    private String role = "USER";      
+
+    // ✅ ADD 2 — Status
+    @Column(name = "status", nullable = false)
+    private String status = "ACTIVE";  
+
+    // ✅ ADD 3 — Last Login
+    @Column(name = "last_login_at")
+    private LocalDateTime lastLoginAt;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false, nullable = false)

@@ -38,4 +38,7 @@ public class UserRequest {
     private UUID organisationId;
 
     private UUID entityId;
+    
+    private String role = "USER";
+    private String status = "ACTIVE";
 }

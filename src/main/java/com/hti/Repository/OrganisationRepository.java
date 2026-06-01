@@ -14,5 +14,7 @@ public interface OrganisationRepository extends JpaRepository<organisation, UUID
 JpaSpecificationExecutor<organisation> {  
     Optional<organisation> findByEmail(String email);
     boolean existsByEmail(String email);
+    boolean existsByCompanyRegistrationNumber(String companyRegistrationNumber);
+    
     boolean existsByDomain(String domain);    	
 }
