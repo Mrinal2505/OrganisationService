@@ -34,5 +34,5 @@ public interface UserService {
     ResponseEntity<?> getByEntity(UUID entityId);
     
     ResponseEntity<?> checkUsernameAvailability(String username); 
-    ResponseEntity<?> login(LoginRequest request);   
+    ResponseEntity<?> login(String encryptedData);
 }

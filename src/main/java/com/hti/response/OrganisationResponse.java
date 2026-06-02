@@ -32,4 +32,5 @@ public class OrganisationResponse {
     private String postalCode;
     private String timezone;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

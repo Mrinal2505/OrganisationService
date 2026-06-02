@@ -1,5 +1,7 @@
 package com.hti.controller;
 
+
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.http.MediaType;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hti.request.LoginRequest;
 import com.hti.request.UserRequest;
 import com.hti.request.UserUpdateRequest;
 import com.hti.service.UserService;
@@ -89,9 +90,9 @@ public class UserController {
         return service.checkUsernameAvailability(username);
     }
 
-    @Operation(summary = "Login")                           // ✅ NEW
-    @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
-        return service.login(request);
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Map<String, String> body) {
+        return service.login(body.get("encryptedData"));
     }
+    
 }

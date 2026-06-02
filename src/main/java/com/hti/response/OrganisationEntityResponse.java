@@ -22,4 +22,5 @@ public class OrganisationEntityResponse {
     private Integer priority;
     private Map<String, Object> attributes;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

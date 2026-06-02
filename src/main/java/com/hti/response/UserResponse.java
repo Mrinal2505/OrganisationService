@@ -22,4 +22,5 @@ public class UserResponse {
     private String role;          
     private String status;        
     private LocalDateTime lastLoginAt;  
+    private LocalDateTime updatedAt;
 }

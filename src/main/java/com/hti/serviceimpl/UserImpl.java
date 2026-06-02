@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hti.Repository.OrganisationEntityRepository;
 import com.hti.Repository.OrganisationRepository;
 import com.hti.Repository.UserRepository;
@@ -32,6 +34,7 @@ import com.hti.request.UserUpdateRequest;
 import com.hti.response.PaginatedResponse;
 import com.hti.response.UserResponse;
 import com.hti.service.UserService;
+import com.hti.util.CryptoUtil;
 
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +49,10 @@ public class UserImpl implements UserService {
     private final UserRepository repository;
     private final OrganisationRepository organisationRepository;          
     private final OrganisationEntityRepository organisationEntityRepository;
+    private final CryptoUtil cryptoUtil;
 
+    @Autowired
+    private ObjectMapper objectMapper;
     @Override
     public ResponseEntity<?> create(UserRequest request) {
         logger.info("Creating user | email={}", request.getEmail());
@@ -303,10 +309,27 @@ private Specification<User> buildUserSpec(
     }
     
     @Override
-    public ResponseEntity<?> login(LoginRequest request) {
-        logger.info("Login attempt | username={}", request.getUsername());
+    public ResponseEntity<?> login(String encryptedData) {
+        
+        // 1. Decrypt
+        String json;
+        try {
+            json = cryptoUtil.decrypt(encryptedData);
+            logger.info("Login attempt | decrypted json={}", json);
+        } catch (Exception e) {
+            logger.warn("Login decryption failed: {}", e.getMessage());
+            throw new BadRequestException("Invalid encrypted request");
+        }
 
-        User user = repository.findByUsername(request.getUsername().toLowerCase())
+        LoginRequest request;
+        try {
+            request = objectMapper.readValue(json, LoginRequest.class);
+        } catch (Exception e) {
+            throw new BadRequestException("Malformed login payload");
+        }
+
+        User user = repository
+                .findByUsername(request.getUsername().toLowerCase())
                 .orElseThrow(() -> {
                     logger.warn("Login failed - not found | username={}", request.getUsername());
                     return new BadRequestException("Invalid username or password");
@@ -317,13 +340,13 @@ private Specification<User> buildUserSpec(
             throw new BadRequestException("Invalid username or password");
         }
 
+       
         user.setLastLoginAt(LocalDateTime.now());
         repository.save(user);
 
         logger.info("Login successful | username={} id={}", request.getUsername(), user.getId());
         return ResponseEntity.ok(toResponse(user));
     }
-
     private UserResponse toResponse(User user) {
         return UserResponse.builder()
                 .id(user.getId())
@@ -338,6 +361,7 @@ private Specification<User> buildUserSpec(
                 .username(user.getUsername())
                 .status(user.getStatus())          
                 .lastLoginAt(user.getLastLoginAt())
+                .updatedAt(user.getUpdatedAt())
                 .build();
     }
 }

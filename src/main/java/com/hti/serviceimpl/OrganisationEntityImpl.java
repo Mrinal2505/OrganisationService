@@ -260,6 +260,7 @@ public ResponseEntity<?> update(UUID id, OrganisationEntityUpdateRequest request
                 .priority(entity.getPriority())
                 .attributes(entity.getAttributes())
                 .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
                 .build();
     }
 }

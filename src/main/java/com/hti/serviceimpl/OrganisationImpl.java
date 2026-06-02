@@ -267,6 +267,7 @@ public class OrganisationImpl implements OrganisationService {
                 .postalCode(org.getPostalCode())
                 .timezone(org.getTimezone())
                 .createdAt(org.getCreatedAt())
+                .updatedAt(org.getUpdatedAt())
                 .build();
     }
 }
