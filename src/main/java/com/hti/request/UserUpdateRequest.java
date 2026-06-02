@@ -1,8 +1,14 @@
 package com.hti.request;
 
-import jakarta.validation.constraints.Size;
-import lombok.*;
 import java.util.UUID;
+
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -17,7 +23,7 @@ public class UserUpdateRequest {
     @Size(min = 2, max = 50, message = "Last name must be between 2 and 50 characters")
     private String lastName;
 
-    @Size(min = 10, max = 15, message = "Phone must be between 10 and 15 digits")
+    @Pattern(regexp = "^[0-9]{10,15}$", message = "Phone must contain only digits (10-15)")
     private String phone;
 
     private UUID entityId;

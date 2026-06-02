@@ -17,4 +17,6 @@ JpaSpecificationExecutor<User>{
     boolean existsByEmail(String email);
     List<User> findByOrganisationId(UUID organisationId);
     List<User> findByEntityId(UUID entityId);
+    boolean existsByUsername(String username);       
+    Optional<User> findByUsername(String username); 
 }

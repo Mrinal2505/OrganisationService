@@ -2,8 +2,13 @@ package com.hti.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -34,7 +39,7 @@ public class OrganisationRequest {
     private String email;
 
     @NotBlank(message = "Phone is required")
-    @Size(min = 10, max = 15, message = "Phone must be between 10 and 15 digits")
+    @Pattern(regexp = "^[0-9]{10,15}$", message = "Phone must contain only digits (10-15)")
     private String phone;
 
     private String registeredAddress;

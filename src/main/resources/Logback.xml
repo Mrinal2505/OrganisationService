@@ -36,6 +36,25 @@
 
         </rollingPolicy>
     </appender>
+     
+    <appender name="DB-FILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${DEV_HOME}/db.log</file>
+        <encoder>
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>
+                ${DEV_HOME}/archived/db.%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>7</maxHistory>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+    </appender>
     
     <logger name="tracklogger"
             level="INFO"
@@ -45,6 +64,12 @@
         <appender-ref ref="TRACK-FILE"/>
 
     </logger>
+    <logger name="dblogger"
+        level="INFO"
+        additivity="false">
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="DB-FILE"/>
+</logger>
 
     <!-- Root Logger -->
     <root level="ERROR">

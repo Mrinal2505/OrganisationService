@@ -18,7 +18,7 @@ public class UserResponse {
     private UUID organisationId;
     private UUID entityId;
     private LocalDateTime createdAt;
-    
+    private String username;
     private String role;          
     private String status;        
     private LocalDateTime lastLoginAt;  

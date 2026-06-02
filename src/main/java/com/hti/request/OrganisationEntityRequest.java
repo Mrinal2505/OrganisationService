@@ -19,7 +19,6 @@ import lombok.Setter;
 @Builder
 public class OrganisationEntityRequest {
 
-    @NotBlank(message = "Organisation ID is required")
     private UUID organisationId;
 
     @NotBlank(message = "Entity type is required")

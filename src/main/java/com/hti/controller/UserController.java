@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hti.request.LoginRequest;
 import com.hti.request.UserRequest;
 import com.hti.request.UserUpdateRequest;
 import com.hti.service.UserService;
@@ -80,5 +81,17 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@RequestParam UUID id) {       
         return service.delete(id);
+    }
+    
+    @Operation(summary = "Check username availability")     // ✅ NEW
+    @GetMapping("/check-username")
+    public ResponseEntity<?> checkUsername(@RequestParam String username) {
+        return service.checkUsernameAvailability(username);
+    }
+
+    @Operation(summary = "Login")                           // ✅ NEW
+    @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
+        return service.login(request);
     }
 }

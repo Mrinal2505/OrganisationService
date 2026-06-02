@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 
+import com.hti.request.LoginRequest;
 import com.hti.request.UserRequest;
 import com.hti.request.UserUpdateRequest;
 
@@ -31,4 +32,7 @@ public interface UserService {
     ResponseEntity<?> getByOrganisation(UUID organisationId);
 
     ResponseEntity<?> getByEntity(UUID entityId);
+    
+    ResponseEntity<?> checkUsernameAvailability(String username); 
+    ResponseEntity<?> login(LoginRequest request);   
 }

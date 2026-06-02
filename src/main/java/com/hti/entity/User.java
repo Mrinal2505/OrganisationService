@@ -35,6 +35,11 @@ public class User {
 
     @Column(name = "password", nullable = false)
     private String password;
+    
+ 
+    @Column(name = "username", unique = true, nullable = true, length = 30)
+    private String username;
+
 
     @Column(name = "organisation_id", nullable = false)
     private UUID organisationId;
@@ -43,13 +48,11 @@ public class User {
     private UUID entityId;
     
     @Column(name = "role", nullable = false)
-    private String role = "USER";      
+    private String role;    
 
-    // ✅ ADD 2 — Status
     @Column(name = "status", nullable = false)
-    private String status = "ACTIVE";  
-
-    // ✅ ADD 3 — Last Login
+    private String status;
+   
     @Column(name = "last_login_at")
     private LocalDateTime lastLoginAt;
 

@@ -17,9 +17,11 @@ public interface OrganisationEntityRepository extends JpaRepository<Organisation
 
     List<OrganisationEntity> findByOrganisationId(UUID organisationId);
 
-    List<OrganisationEntity> findByEntityType(String entityType);   // UUID → String
+    List<OrganisationEntity> findByEntityType(String entityType);   
 
-    List<OrganisationEntity> findByOrganisationIdAndEntityType(UUID organisationId, String entityType);
+
+    
+    boolean existsByOrganisationIdAndEntityType(UUID organisationId, String entityType); 
 
     @Query(value = """
         SELECT * FROM organisation_entity

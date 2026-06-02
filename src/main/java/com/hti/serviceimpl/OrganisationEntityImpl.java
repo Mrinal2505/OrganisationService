@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.hti.Repository.OrganisationEntityRepository;
+import com.hti.Repository.OrganisationRepository;
 import com.hti.entity.OrganisationEntity;
 import com.hti.exception.InternalServerException;
 import com.hti.exception.NotFoundException;
@@ -36,10 +37,16 @@ public class OrganisationEntityImpl implements OrganisationEntityService {
     private static final Logger logger = LoggerFactory.getLogger("tracklogger");
 
     private final OrganisationEntityRepository repository;
-
+    private final OrganisationRepository organisationRepository; 
     @Override
     public ResponseEntity<?> create(OrganisationEntityRequest request) {
         logger.info("Creating entity | type={} orgId={}", request.getEntityType(), request.getOrganisationId());
+     
+        if (!organisationRepository.existsById(request.getOrganisationId())) {
+            logger.error("Organisation not found | orgId={}", request.getOrganisationId());
+            throw new NotFoundException("Organisation not found: " + request.getOrganisationId());
+        }
+        
         try {
             OrganisationEntity entity = OrganisationEntity.builder()
                     .organisationId(request.getOrganisationId())
@@ -56,27 +63,34 @@ public class OrganisationEntityImpl implements OrganisationEntityService {
         }
     }
 
-    @Override
-    public ResponseEntity<?> update(UUID id, OrganisationEntityUpdateRequest request) {
-        logger.info("Updating entity | id={}", id);
+   @Override
+public ResponseEntity<?> update(UUID id, OrganisationEntityUpdateRequest request) {
+    logger.info("Updating entity | id={}", id);
 
-        OrganisationEntity entity = repository.findById(id).orElseThrow(() -> {
-            logger.error("Entity not found | id={}", id);
-            return new NotFoundException("Entity not found: " + id);
-        });
+    OrganisationEntity entity = repository.findById(id).orElseThrow(() -> {
+        logger.error("Entity not found | id={}", id);
+        return new NotFoundException("Entity not found: " + id);
+    });
 
-        try {
+    try {
+        if (request.getEntityType() != null)
             entity.setEntityType(request.getEntityType());
+
+        if (request.getPriority() != null)
             entity.setPriority(request.getPriority());
+
+        if (request.getAttributes() != null)
             entity.setAttributes(request.getAttributes());
-            entity = repository.save(entity);
-            logger.info("Entity updated successfully | id={}", entity.getId());
-            return ResponseEntity.ok(toResponse(entity));
-        } catch (Exception ex) {
-            logger.error("Error updating entity | id={}", id, ex);
-            throw new InternalServerException("Failed to update entity: " + ex.getMessage());
-        }
+
+        entity = repository.save(entity);
+        logger.info("Entity updated successfully | id={}", entity.getId());
+        return ResponseEntity.ok(toResponse(entity));
+
+    } catch (Exception ex) {
+        logger.error("Error updating entity | id={}", id, ex);
+        throw new InternalServerException("Failed to update entity: " + ex.getMessage());
     }
+}
 
     @Override
     public ResponseEntity<?> delete(UUID id) {

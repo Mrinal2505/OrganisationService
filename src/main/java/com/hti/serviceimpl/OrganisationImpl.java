@@ -34,12 +34,15 @@ import lombok.RequiredArgsConstructor;
 public class OrganisationImpl implements OrganisationService {
 
     private static final Logger logger = LoggerFactory.getLogger("tracklogger");
+    private static final Logger dbLogger = LoggerFactory.getLogger("dblogger");
 
     private final OrganisationRepository repository;
 
     @Override
     public ResponseEntity<?> create(OrganisationRequest request) {
-        logger.info("Creating organisation | name={}", request.getOrganizationName());
+    	logger.info("Create organisation request received | name={}", request.getOrganizationName());
+    	
+    	dbLogger.info("Checking organisation existence by email | email={}", request.getEmail());
 
         if (repository.existsByEmail(request.getEmail())) {
             logger.error("Organisation already exists | email={}", request.getEmail());
@@ -72,9 +75,12 @@ public class OrganisationImpl implements OrganisationService {
                     .postalCode(request.getPostalCode())
                     .timezone(request.getTimezone())
                     .build();
+            
+            
 
             org = repository.save(org);
             logger.info("Organisation created successfully | id={} name={}", org.getId(), org.getOrganizationName());
+            dbLogger.info("Saving organisation into database");
             return ResponseEntity.status(HttpStatus.CREATED).body(toResponse(org));
 
         } catch (BadRequestException ex) {

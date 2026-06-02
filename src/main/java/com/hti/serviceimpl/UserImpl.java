@@ -1,8 +1,11 @@
 package com.hti.serviceimpl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -16,11 +19,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.hti.Repository.OrganisationEntityRepository;
+import com.hti.Repository.OrganisationRepository;
 import com.hti.Repository.UserRepository;
 import com.hti.entity.User;
 import com.hti.exception.BadRequestException;
 import com.hti.exception.InternalServerException;
 import com.hti.exception.NotFoundException;
+import com.hti.request.LoginRequest;
 import com.hti.request.UserRequest;
 import com.hti.request.UserUpdateRequest;
 import com.hti.response.PaginatedResponse;
@@ -35,8 +41,11 @@ import lombok.RequiredArgsConstructor;
 public class UserImpl implements UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserImpl.class);
-
+    private static final Pattern USERNAME_PATTERN =
+            Pattern.compile("^[a-zA-Z0-9]{3,30}$");
     private final UserRepository repository;
+    private final OrganisationRepository organisationRepository;          
+    private final OrganisationEntityRepository organisationEntityRepository;
 
     @Override
     public ResponseEntity<?> create(UserRequest request) {
@@ -45,6 +54,21 @@ public class UserImpl implements UserService {
         if (repository.existsByEmail(request.getEmail())) {
             logger.error("User already exists | email={}", request.getEmail());
             throw new BadRequestException("User with email '" + request.getEmail() + "' already exists");
+        }
+        
+        if (repository.existsByUsername(request.getUsername().toLowerCase())) {
+            logger.error("Username already taken | username={}", request.getUsername());
+            throw new BadRequestException("Username '" + request.getUsername() + "' is already taken");
+        }
+        
+        if (!organisationRepository.existsById(request.getOrganisationId())) {
+            logger.error("Organisation not found | orgId={}", request.getOrganisationId());
+            throw new NotFoundException("Organisation not found: " + request.getOrganisationId());
+        }
+        
+        if (request.getEntityId() != null && !organisationEntityRepository.existsById(request.getEntityId())) {
+            logger.error("Entity not found | entityId={}", request.getEntityId());
+            throw new NotFoundException("Entity not found: " + request.getEntityId());
         }
 
         try {
@@ -57,6 +81,7 @@ public class UserImpl implements UserService {
                     .organisationId(request.getOrganisationId())
                     .entityId(request.getEntityId())
                     .role(request.getRole())       
+                    .username(request.getUsername().toLowerCase())
                     .status(request.getStatus()) 
                     .build();
 
@@ -76,11 +101,18 @@ public class UserImpl implements UserService {
 public ResponseEntity<?> update(UUID id, UserUpdateRequest request) {
     logger.info("Updating user | id={}", id);
 
+ 
+
     User user = repository.findById(id)
             .orElseThrow(() -> {
                 logger.error("User not found | id={}", id);
                 return new NotFoundException("User not found: " + id);
             });
+    
+    if (request.getEntityId() != null && 
+            !organisationEntityRepository.existsById(request.getEntityId())) {
+            throw new NotFoundException("Entity not found: " + request.getEntityId());
+        }
 
     try {
         if (request.getFirstName() != null)
@@ -248,6 +280,49 @@ private Specification<User> buildUserSpec(
         logger.info("Users fetched successfully | entityId={} count={}", entityId, list.size());
         return ResponseEntity.ok(list);
     }
+    
+    @Override
+    public ResponseEntity<?> checkUsernameAvailability(String username) {
+        logger.info("Checking username | username={}", username);
+
+        if (username == null || !USERNAME_PATTERN.matcher(username).matches()) {
+            logger.warn("Invalid username format | username={}", username);
+            throw new BadRequestException(
+                    "Username must be alphanumeric only, between 3 to 30 characters"
+            );
+        }
+
+        boolean taken = repository.existsByUsername(username.toLowerCase());
+        logger.info("Username check done | username={} available={}", username, !taken);
+
+        return ResponseEntity.ok(Map.of(
+                "username",  username,
+                "available", !taken,
+                "message",   taken ? "Username is already taken" : "Username is available"
+        ));
+    }
+    
+    @Override
+    public ResponseEntity<?> login(LoginRequest request) {
+        logger.info("Login attempt | username={}", request.getUsername());
+
+        User user = repository.findByUsername(request.getUsername().toLowerCase())
+                .orElseThrow(() -> {
+                    logger.warn("Login failed - not found | username={}", request.getUsername());
+                    return new BadRequestException("Invalid username or password");
+                });
+
+        if (!request.getPassword().equals(user.getPassword())) {
+            logger.warn("Login failed - wrong password | username={}", request.getUsername());
+            throw new BadRequestException("Invalid username or password");
+        }
+
+        user.setLastLoginAt(LocalDateTime.now());
+        repository.save(user);
+
+        logger.info("Login successful | username={} id={}", request.getUsername(), user.getId());
+        return ResponseEntity.ok(toResponse(user));
+    }
 
     private UserResponse toResponse(User user) {
         return UserResponse.builder()
@@ -259,7 +334,8 @@ private Specification<User> buildUserSpec(
                 .organisationId(user.getOrganisationId())
                 .entityId(user.getEntityId())
                 .createdAt(user.getCreatedAt())
-                .role(user.getRole())              
+                .role(user.getRole())       
+                .username(user.getUsername())
                 .status(user.getStatus())          
                 .lastLoginAt(user.getLastLoginAt())
                 .build();
