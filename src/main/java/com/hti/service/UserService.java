@@ -5,9 +5,10 @@ import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 
-import com.hti.request.LoginRequest;
+import com.hti.request.ResetPasswordRequest;
 import com.hti.request.UserRequest;
 import com.hti.request.UserUpdateRequest;
+import com.hti.request.VerifyOtpRequest;
 
 public interface UserService {
 
@@ -35,4 +36,10 @@ public interface UserService {
     
     ResponseEntity<?> checkUsernameAvailability(String username); 
     ResponseEntity<?> login(String encryptedData);
+    
+    ResponseEntity<?> changePassword(UUID id);
+    ResponseEntity<?> verifyLink(String encryptData);
+    ResponseEntity<?> verifyOtp(String encryptData, String otp);
+    ResponseEntity<?> resetPassword(String encryptData, ResetPasswordRequest request);
+    
 }

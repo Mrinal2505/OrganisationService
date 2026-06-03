@@ -1,5 +1,6 @@
 package com.hti.serviceimpl;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value; // ← CORRECT
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,23 +22,29 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hti.Repository.OrganisationEntityRepository;
 import com.hti.Repository.OrganisationRepository;
+import com.hti.Repository.PasswordResetTokenRepository;
 import com.hti.Repository.UserRepository;
+import com.hti.entity.PasswordResetToken;
 import com.hti.entity.User;
 import com.hti.exception.BadRequestException;
 import com.hti.exception.InternalServerException;
 import com.hti.exception.NotFoundException;
 import com.hti.request.LoginRequest;
+import com.hti.request.ResetPasswordRequest;
 import com.hti.request.UserRequest;
 import com.hti.request.UserUpdateRequest;
 import com.hti.response.PaginatedResponse;
 import com.hti.response.UserResponse;
+import com.hti.service.EmailService;
 import com.hti.service.UserService;
 import com.hti.util.CryptoUtil;
 
 import jakarta.persistence.criteria.Predicate;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -50,6 +58,18 @@ public class UserImpl implements UserService {
     private final OrganisationRepository organisationRepository;          
     private final OrganisationEntityRepository organisationEntityRepository;
     private final CryptoUtil cryptoUtil;
+    
+    @Value("${app.reset-password.expiry-minutes}")
+    private int expiryMinutes;
+
+    @Value("${app.reset-password.base-url}")
+    private String baseUrl;
+
+    @Autowired
+    private PasswordResetTokenRepository tokenRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -347,6 +367,207 @@ private Specification<User> buildUserSpec(
         logger.info("Login successful | username={} id={}", request.getUsername(), user.getId());
         return ResponseEntity.ok(toResponse(user));
     }
+    
+//step -1 
+   @Override
+public ResponseEntity<?> changePassword(UUID id) {
+    logger.info("changePassword | userId={}", id);
+
+    User user = repository.findById(id)
+            .orElseThrow(() -> new BadRequestException("User not found"));
+
+    if (user.getEmail() == null || !user.getEmail().contains("@")) {
+        throw new BadRequestException("No valid email found for this user");
+    }
+
+    tokenRepository.deleteByUser(user);
+
+    // encryptData — user info encrypt karo
+    String rawData = "{\"userId\":\"" + user.getId() + "\"}";
+    String encryptData = cryptoUtil.encrypt(rawData);
+
+    PasswordResetToken resetToken = PasswordResetToken.builder()
+            .otp(null)
+            .otpSent(false)
+            .otpVerified(false)
+            .user(user)
+            .expiresAt(LocalDateTime.now().plusMinutes(expiryMinutes))
+            .used(false)
+            .createdAt(LocalDateTime.now())
+            .build();
+
+    tokenRepository.save(resetToken);
+
+    // Link mein encryptData jaayega token ki jagah
+    String resetLink = baseUrl + "/users/verify-link?encryptData=" + encryptData;
+    emailService.sendPasswordResetLink(user.getEmail(), user.getUsername(), resetLink);
+
+    return ResponseEntity.ok("Password reset link sent to your registered email.");
+}
+
+    // ── Step 2 ──────────────────────────────────────────────────────
+  @Override
+public ResponseEntity<?> verifyLink(String encryptData) {
+    logger.info("verifyLink | encryptData={}", encryptData);
+
+    // 1. Decrypt karke userId nikalo
+    String json;
+    try {
+        json = cryptoUtil.decrypt(encryptData);
+    } catch (Exception e) {
+        throw new BadRequestException("Invalid or expired link");
+    }
+
+    UUID userId;
+    try {
+        JsonNode node = objectMapper.readTree(json);
+        userId = UUID.fromString(node.get("userId").asText());
+    } catch (Exception e) {
+        throw new BadRequestException("Malformed link data");
+    }
+
+    // 2. User dhundo
+    User user = repository.findById(userId)
+            .orElseThrow(() -> new BadRequestException("User not found"));
+
+    // 3. Token dhundo
+    PasswordResetToken resetToken = tokenRepository.findByUser(user)
+            .orElseThrow(() -> new BadRequestException("No reset request found"));
+
+    // 4. Expiry check
+    if (resetToken.getExpiresAt().isBefore(LocalDateTime.now())) {
+        tokenRepository.delete(resetToken);
+        throw new BadRequestException("Link expired. Please request a new one");
+    }
+
+    if (resetToken.isUsed()) {
+        throw new BadRequestException("Link already used");
+    }
+
+    // 5. OTP generate karo
+    String otp = String.format("%06d", new SecureRandom().nextInt(999999));
+    resetToken.setOtp(otp);
+    resetToken.setOtpSent(true);
+    tokenRepository.save(resetToken);
+
+    // 6. OTP email bhejo
+    emailService.sendOtpEmail(user.getEmail(), user.getUsername(), otp);
+
+    return ResponseEntity.ok("OTP sent to your registered email.");
+}
+
+    // ── Step 3 ──────────────────────────────────────────────────────
+   @Override
+public ResponseEntity<?> verifyOtp(String encryptData, String otp) {
+    logger.info("verifyOtp");
+
+    // 1. Decrypt
+    String json;
+    try {
+        json = cryptoUtil.decrypt(encryptData);
+    } catch (Exception e) {
+        throw new BadRequestException("Invalid or expired link");
+    }
+
+    UUID userId;
+    try {
+        JsonNode node = objectMapper.readTree(json);
+        userId = UUID.fromString(node.get("userId").asText());
+    } catch (Exception e) {
+        throw new BadRequestException("Malformed link data");
+    }
+
+    // 2. User aur token dhundo
+    User user = repository.findById(userId)
+            .orElseThrow(() -> new BadRequestException("User not found"));
+
+    PasswordResetToken resetToken = tokenRepository.findByUser(user)
+            .orElseThrow(() -> new BadRequestException("No reset request found"));
+
+    // 3. Checks
+    if (resetToken.getExpiresAt().isBefore(LocalDateTime.now())) {
+        tokenRepository.delete(resetToken);
+        throw new BadRequestException("Token expired. Please request a new one");
+    }
+
+    if (resetToken.isUsed()) {
+        throw new BadRequestException("Token already used");
+    }
+
+    if (!resetToken.isOtpSent()) {
+        throw new BadRequestException("OTP not generated. Please click the reset link first");
+    }
+
+    // 4. OTP match
+    if (!resetToken.getOtp().equals(otp)) {
+        logger.warn("Invalid OTP | userId={}", userId);
+        throw new BadRequestException("Invalid OTP");
+    }
+
+    resetToken.setOtpVerified(true);
+    tokenRepository.save(resetToken);
+
+    return ResponseEntity.ok("OTP verified successfully.");
+}
+
+    // ── Step 4 ──────────────────────────────────────────────────────
+  @Override
+@Transactional
+public ResponseEntity<?> resetPassword(String encryptData, ResetPasswordRequest request) {
+    logger.info("resetPassword");
+
+    if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+        throw new BadRequestException("Passwords do not match");
+    }
+
+    // 1. Decrypt
+    String json;
+    try {
+        json = cryptoUtil.decrypt(encryptData);
+    } catch (Exception e) {
+        throw new BadRequestException("Invalid or expired link");
+    }
+
+    UUID userId;
+    try {
+        JsonNode node = objectMapper.readTree(json);
+        userId = UUID.fromString(node.get("userId").asText());
+    } catch (Exception e) {
+        throw new BadRequestException("Malformed link data");
+    }
+
+    // 2. User aur token dhundo
+    User user = repository.findById(userId)
+            .orElseThrow(() -> new BadRequestException("User not found"));
+
+    PasswordResetToken resetToken = tokenRepository.findByUser(user)
+            .orElseThrow(() -> new BadRequestException("No reset request found"));
+
+    // 3. Checks
+    if (resetToken.getExpiresAt().isBefore(LocalDateTime.now())) {
+        tokenRepository.delete(resetToken);
+        throw new BadRequestException("Token expired. Please request a new one");
+    }
+
+    if (!resetToken.isOtpVerified()) {
+        throw new BadRequestException("OTP not verified. Please verify OTP first");
+    }
+
+    if (resetToken.isUsed()) {
+        throw new BadRequestException("Token already used");
+    }
+
+    // 4. Password update
+    user.setPassword(request.getNewPassword());
+    user.setUpdatedAt(LocalDateTime.now());
+    repository.save(user);
+
+    resetToken.setUsed(true);
+    tokenRepository.save(resetToken);
+
+    logger.info("Password reset successful | userId={}", userId);
+    return ResponseEntity.ok("Password reset successfully.");
+}
     private UserResponse toResponse(User user) {
         return UserResponse.builder()
                 .id(user.getId())
@@ -364,4 +585,9 @@ private Specification<User> buildUserSpec(
                 .updatedAt(user.getUpdatedAt())
                 .build();
     }
+    
+    
+    
+    
+    
 }
