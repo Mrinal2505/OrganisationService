@@ -328,7 +328,6 @@ private Specification<User> buildUserSpec(
     
     @Override
     public ResponseEntity<?> login(String encryptedData) {
-        
         // 1. Decrypt
         String json;
         try {
@@ -395,7 +394,6 @@ public ResponseEntity<?> changePassword(UUID id) {
 
     String resetLink = baseUrl + "/users/verify-link?" + encryptData;
     emailService.sendPasswordResetLink(user.getEmail(), user.getUsername(), resetLink);
-
     return ResponseEntity.ok("Password reset link sent to your registered email.");
 }
 
@@ -447,7 +445,6 @@ public ResponseEntity<?> verifyLink(String encryptData) {
 public ResponseEntity<?> verifyOtp(String encryptData, String otp) {
     logger.info("verifyOtp");
 
-    // 1. Decrypt
     String json;
     try {
         json = cryptoUtil.decrypt(encryptData);

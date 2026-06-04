@@ -205,6 +205,7 @@ public class OrganisationImpl implements OrganisationService {
             if (search != null && !search.isBlank()) {
                 String like = "%" + search.toLowerCase() + "%";
                 predicates.add(cb.or(
+                		  cb.like(cb.lower(root.get("companyRegistrationNumber")), like),
                         cb.like(cb.lower(root.get("organizationName")), like),
                         cb.like(cb.lower(root.get("domain")),           like),
                         cb.like(cb.lower(root.get("email")),            like),
@@ -233,7 +234,7 @@ public class OrganisationImpl implements OrganisationService {
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }
-
+    
     private OrganisationResponse toResponse(organisation org) {
         return OrganisationResponse.builder()
                 .id(org.getId())
