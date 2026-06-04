@@ -1,8 +1,15 @@
 package com.hti.response;
 
-import lombok.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
+
+import com.hti.enums.Role;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -19,7 +26,7 @@ public class UserResponse {
     private UUID entityId;
     private LocalDateTime createdAt;
     private String username;
-    private String role;          
+    private Role role;          
     private String status;        
     private LocalDateTime lastLoginAt;  
     private LocalDateTime updatedAt;
