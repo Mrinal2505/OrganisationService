@@ -33,9 +33,11 @@ public class PasswordResetToken {
     private String otp;
 
     @Column(nullable = false)
+    @Builder.Default
     private boolean otpSent = false;
 
     @Column(nullable = false)
+    @Builder.Default
     private boolean otpVerified = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -46,6 +48,7 @@ public class PasswordResetToken {
     private LocalDateTime expiresAt;
 
     @Column(nullable = false)
+    @Builder.Default
     private boolean used = false;
 
     @Column(nullable = false)

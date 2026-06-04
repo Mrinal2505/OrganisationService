@@ -127,8 +127,6 @@ public class UserImpl implements UserService {
 public ResponseEntity<?> update(UUID id, UserUpdateRequest request) {
     logger.info("Updating user | id={}", id);
 
- 
-
     User user = repository.findById(id)
             .orElseThrow(() -> {
                 logger.error("User not found | id={}", id);
@@ -360,7 +358,6 @@ private Specification<User> buildUserSpec(
             throw new BadRequestException("Invalid username or password");
         }
 
-       
         user.setLastLoginAt(LocalDateTime.now());
         repository.save(user);
 
@@ -368,7 +365,6 @@ private Specification<User> buildUserSpec(
         return ResponseEntity.ok(toResponse(user));
     }
     
-//step -1 
    @Override
 public ResponseEntity<?> changePassword(UUID id) {
     logger.info("changePassword | userId={}", id);
@@ -382,7 +378,6 @@ public ResponseEntity<?> changePassword(UUID id) {
 
     tokenRepository.deleteByUser(user);
 
-    // encryptData — user info encrypt karo
     String rawData = "{\"userId\":\"" + user.getId() + "\"}";
     String encryptData = cryptoUtil.encrypt(rawData);
 
@@ -398,19 +393,16 @@ public ResponseEntity<?> changePassword(UUID id) {
 
     tokenRepository.save(resetToken);
 
-    // Link mein encryptData jaayega token ki jagah
-    String resetLink = baseUrl + "/users/verify-link?encryptData=" + encryptData;
+    String resetLink = baseUrl + "/users/verify-link?" + encryptData;
     emailService.sendPasswordResetLink(user.getEmail(), user.getUsername(), resetLink);
 
     return ResponseEntity.ok("Password reset link sent to your registered email.");
 }
 
-    // ── Step 2 ──────────────────────────────────────────────────────
   @Override
 public ResponseEntity<?> verifyLink(String encryptData) {
     logger.info("verifyLink | encryptData={}", encryptData);
 
-    // 1. Decrypt karke userId nikalo
     String json;
     try {
         json = cryptoUtil.decrypt(encryptData);
@@ -426,15 +418,12 @@ public ResponseEntity<?> verifyLink(String encryptData) {
         throw new BadRequestException("Malformed link data");
     }
 
-    // 2. User dhundo
     User user = repository.findById(userId)
             .orElseThrow(() -> new BadRequestException("User not found"));
 
-    // 3. Token dhundo
     PasswordResetToken resetToken = tokenRepository.findByUser(user)
             .orElseThrow(() -> new BadRequestException("No reset request found"));
 
-    // 4. Expiry check
     if (resetToken.getExpiresAt().isBefore(LocalDateTime.now())) {
         tokenRepository.delete(resetToken);
         throw new BadRequestException("Link expired. Please request a new one");
@@ -444,19 +433,16 @@ public ResponseEntity<?> verifyLink(String encryptData) {
         throw new BadRequestException("Link already used");
     }
 
-    // 5. OTP generate karo
     String otp = String.format("%06d", new SecureRandom().nextInt(999999));
     resetToken.setOtp(otp);
     resetToken.setOtpSent(true);
     tokenRepository.save(resetToken);
 
-    // 6. OTP email bhejo
     emailService.sendOtpEmail(user.getEmail(), user.getUsername(), otp);
 
     return ResponseEntity.ok("OTP sent to your registered email.");
 }
 
-    // ── Step 3 ──────────────────────────────────────────────────────
    @Override
 public ResponseEntity<?> verifyOtp(String encryptData, String otp) {
     logger.info("verifyOtp");
@@ -477,14 +463,12 @@ public ResponseEntity<?> verifyOtp(String encryptData, String otp) {
         throw new BadRequestException("Malformed link data");
     }
 
-    // 2. User aur token dhundo
     User user = repository.findById(userId)
             .orElseThrow(() -> new BadRequestException("User not found"));
 
     PasswordResetToken resetToken = tokenRepository.findByUser(user)
             .orElseThrow(() -> new BadRequestException("No reset request found"));
 
-    // 3. Checks
     if (resetToken.getExpiresAt().isBefore(LocalDateTime.now())) {
         tokenRepository.delete(resetToken);
         throw new BadRequestException("Token expired. Please request a new one");
@@ -498,7 +482,6 @@ public ResponseEntity<?> verifyOtp(String encryptData, String otp) {
         throw new BadRequestException("OTP not generated. Please click the reset link first");
     }
 
-    // 4. OTP match
     if (!resetToken.getOtp().equals(otp)) {
         logger.warn("Invalid OTP | userId={}", userId);
         throw new BadRequestException("Invalid OTP");
@@ -510,7 +493,7 @@ public ResponseEntity<?> verifyOtp(String encryptData, String otp) {
     return ResponseEntity.ok("OTP verified successfully.");
 }
 
-    // ── Step 4 ──────────────────────────────────────────────────────
+ 
   @Override
 @Transactional
 public ResponseEntity<?> resetPassword(String encryptData, ResetPasswordRequest request) {
@@ -536,14 +519,13 @@ public ResponseEntity<?> resetPassword(String encryptData, ResetPasswordRequest 
         throw new BadRequestException("Malformed link data");
     }
 
-    // 2. User aur token dhundo
+   
     User user = repository.findById(userId)
             .orElseThrow(() -> new BadRequestException("User not found"));
 
     PasswordResetToken resetToken = tokenRepository.findByUser(user)
             .orElseThrow(() -> new BadRequestException("No reset request found"));
 
-    // 3. Checks
     if (resetToken.getExpiresAt().isBefore(LocalDateTime.now())) {
         tokenRepository.delete(resetToken);
         throw new BadRequestException("Token expired. Please request a new one");
@@ -557,7 +539,6 @@ public ResponseEntity<?> resetPassword(String encryptData, ResetPasswordRequest 
         throw new BadRequestException("Token already used");
     }
 
-    // 4. Password update
     user.setPassword(request.getNewPassword());
     user.setUpdatedAt(LocalDateTime.now());
     repository.save(user);

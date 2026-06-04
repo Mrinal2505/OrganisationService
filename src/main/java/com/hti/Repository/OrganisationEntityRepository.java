@@ -19,8 +19,6 @@ public interface OrganisationEntityRepository extends JpaRepository<Organisation
 
     List<OrganisationEntity> findByEntityType(String entityType);   
 
-
-    
     boolean existsByOrganisationIdAndEntityType(UUID organisationId, String entityType); 
 
     @Query(value = """

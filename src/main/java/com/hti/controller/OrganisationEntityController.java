@@ -28,15 +28,14 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/entities")
 @RequiredArgsConstructor
 public class OrganisationEntityController {
-
     private final OrganisationEntityService service;
-
     @Operation(summary = "Create entity", description = "Creates a new organisation entity")
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping()
     public ResponseEntity<?> create(@Valid @RequestBody OrganisationEntityRequest request) {
         return service.create(request);
     }
-
+    
+    
     @Operation(summary = "Get all entities", description = "Fetch paginated list of entities with optional filters")
     @GetMapping
     public ResponseEntity<?> getAll(

@@ -15,11 +15,16 @@ import java.util.UUID;
 @Builder
 @Entity
 @Table(name = "organisation",
-uniqueConstraints = {
-    @UniqueConstraint(name = "uk_org_email",  columnNames = "email"),
-    @UniqueConstraint(name = "uk_org_domain", columnNames = "domain"),
-    @UniqueConstraint(name = "uk_org_reg_no", columnNames = "company_registration_number")
-}
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "uk_org_reg_domain_email",
+            columnNames = {
+                "company_registration_number",
+                "domain",
+                "email"
+            }
+        )
+    }
 )
 public class organisation {
 

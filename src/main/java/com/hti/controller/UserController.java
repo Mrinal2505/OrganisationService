@@ -41,7 +41,7 @@ public class UserController {
     private final UserService service;
 
     @Operation(summary = "Create user", description = "Creates a new user")
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping()
     public ResponseEntity<?> create(@Valid @RequestBody UserRequest request) {
         return service.create(request);
     }
@@ -137,11 +137,6 @@ public class UserController {
         return service.resetPassword(encryptData, request);
     }
 
-    
-    
-    
-    
-    
     
     @PostMapping("/encrypt")
     @Operation(summary = "Encrypt Data", 

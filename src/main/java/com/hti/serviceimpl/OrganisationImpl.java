@@ -44,19 +44,13 @@ public class OrganisationImpl implements OrganisationService {
     	
     	dbLogger.info("Checking organisation existence by email | email={}", request.getEmail());
 
-        if (repository.existsByEmail(request.getEmail())) {
-            logger.error("Organisation already exists | email={}", request.getEmail());
-            throw new BadRequestException("Organisation with email '" + request.getEmail() + "' already exists");
-        }
-
-        if (request.getDomain() != null && repository.existsByDomain(request.getDomain()))
-            throw new BadRequestException("Organisation with domain '" + request.getDomain() + "' already exists");
-
-        if (request.getCompanyRegistrationNumber() != null &&
-            repository.existsByCompanyRegistrationNumber(request.getCompanyRegistrationNumber()))
-            throw new BadRequestException("Organisation with registration number '" +
-                    request.getCompanyRegistrationNumber() + "' already exists");
-
+    	  if (repository.existsByCompanyRegistrationNumberAndDomainAndEmail(
+    	            request.getCompanyRegistrationNumber(),
+    	            request.getDomain(),
+    	            request.getEmail())) {
+    	        throw new BadRequestException(
+    	            "Organisation with same registration number, domain and email already exists");
+    	    }
         try {
             organisation org = organisation.builder()
                     .organizationName(request.getOrganizationName())
@@ -75,9 +69,6 @@ public class OrganisationImpl implements OrganisationService {
                     .postalCode(request.getPostalCode())
                     .timezone(request.getTimezone())
                     .build();
-            
-            
-
             org = repository.save(org);
             logger.info("Organisation created successfully | id={} name={}", org.getId(), org.getOrganizationName());
             dbLogger.info("Saving organisation into database");
@@ -113,11 +104,9 @@ public class OrganisationImpl implements OrganisationService {
             org.setCountry(request.getCountry());
             org.setPostalCode(request.getPostalCode());
             org.setTimezone(request.getTimezone());
-
             org = repository.save(org);
             logger.info("Organisation updated successfully | id={}", org.getId());
             return ResponseEntity.ok(toResponse(org));
-
         } catch (Exception ex) {
             logger.error("Error updating organisation | id={}", id, ex);
             throw new InternalServerException("Failed to update organisation: " + ex.getMessage());
@@ -175,9 +164,7 @@ public class OrganisationImpl implements OrganisationService {
             Specification<organisation> spec = buildOrganisationSpec(
                     search, organizationType, industryType, city, state, country
             );
-
             Page<organisation> result = repository.findAll(spec, pageable);
-
             if (result.getTotalElements() == 0) {
                 throw new NotFoundException("No Organisation found.");
             }
@@ -215,7 +202,6 @@ public class OrganisationImpl implements OrganisationService {
                                                                String state, String country) {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
-
             if (search != null && !search.isBlank()) {
                 String like = "%" + search.toLowerCase() + "%";
                 predicates.add(cb.or(
