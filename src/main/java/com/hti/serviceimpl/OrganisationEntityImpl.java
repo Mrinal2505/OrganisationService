@@ -177,8 +177,7 @@ public ResponseEntity<?> update(UUID id, OrganisationEntityUpdateRequest request
             if (search != null && !search.isBlank()) {
                 String like = "%" + search.toLowerCase() + "%";
                 predicates.add(cb.or(
-                        cb.like(cb.lower(root.get("entityType")),     like),
-                        cb.like(cb.lower(root.get("organisationId")), like)
+                        cb.like(cb.lower(root.get("entityType")),     like)       
                 ));
             }
 
