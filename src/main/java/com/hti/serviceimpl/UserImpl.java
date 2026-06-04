@@ -25,8 +25,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hti.Repository.OrganisationEntityRepository;
 import com.hti.Repository.OrganisationRepository;
+import com.hti.Repository.PasswordHistoryRepository;
 import com.hti.Repository.PasswordResetTokenRepository;
 import com.hti.Repository.UserRepository;
+import com.hti.entity.PasswordHistory;
 import com.hti.entity.PasswordResetToken;
 import com.hti.entity.User;
 import com.hti.exception.BadRequestException;
@@ -57,6 +59,7 @@ public class UserImpl implements UserService {
     private final OrganisationRepository organisationRepository;          
     private final OrganisationEntityRepository organisationEntityRepository;
     private final CryptoUtil cryptoUtil;
+    private final PasswordHistoryRepository passwordHistoryRepository;  // ✅ Add karo
     
     @Value("${app.reset-password.expiry-minutes}")
     private int expiryMinutes;
@@ -121,7 +124,6 @@ public class UserImpl implements UserService {
             throw new InternalServerException("Failed to create user: " + ex.getMessage());
         }
     }
-
   @Override
 public ResponseEntity<?> update(UUID id, UserUpdateRequest request) {
     logger.info("Updating user | id={}", id);
@@ -131,7 +133,6 @@ public ResponseEntity<?> update(UUID id, UserUpdateRequest request) {
                 logger.error("User not found | id={}", id);
                 return new NotFoundException("User not found: " + id);
             });
-    
     if (request.getEntityId() != null && 
             !organisationEntityRepository.existsById(request.getEntityId())) {
             throw new NotFoundException("Entity not found: " + request.getEntityId());
@@ -490,7 +491,7 @@ public ResponseEntity<?> verifyOtp(String encryptData, String otp) {
 }
 
  
-  @Override
+@Override
 @Transactional
 public ResponseEntity<?> resetPassword(String encryptData, ResetPasswordRequest request) {
     logger.info("resetPassword");
@@ -499,7 +500,6 @@ public ResponseEntity<?> resetPassword(String encryptData, ResetPasswordRequest 
         throw new BadRequestException("Passwords do not match");
     }
 
-    // 1. Decrypt
     String json;
     try {
         json = cryptoUtil.decrypt(encryptData);
@@ -515,7 +515,6 @@ public ResponseEntity<?> resetPassword(String encryptData, ResetPasswordRequest 
         throw new BadRequestException("Malformed link data");
     }
 
-   
     User user = repository.findById(userId)
             .orElseThrow(() -> new BadRequestException("User not found"));
 
@@ -535,9 +534,22 @@ public ResponseEntity<?> resetPassword(String encryptData, ResetPasswordRequest 
         throw new BadRequestException("Token already used");
     }
 
+    //old password
+    String oldPassword = user.getPassword();
+
+    
     user.setPassword(request.getNewPassword());
     user.setUpdatedAt(LocalDateTime.now());
     repository.save(user);
+
+    
+    PasswordHistory history = PasswordHistory.builder()
+            .userId(user.getId())
+            .oldPassword(oldPassword)
+            .newPassword(request.getNewPassword())
+            .changedAt(LocalDateTime.now())
+            .build();
+    passwordHistoryRepository.save(history);
 
     resetToken.setUsed(true);
     tokenRepository.save(resetToken);

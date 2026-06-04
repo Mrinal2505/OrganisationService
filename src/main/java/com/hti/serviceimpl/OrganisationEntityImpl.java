@@ -46,7 +46,6 @@ public class OrganisationEntityImpl implements OrganisationEntityService {
             logger.error("Organisation not found | orgId={}", request.getOrganisationId());
             throw new NotFoundException("Organisation not found: " + request.getOrganisationId());
         }
-        
         try {
             OrganisationEntity entity = OrganisationEntity.builder()
                     .organisationId(request.getOrganisationId())

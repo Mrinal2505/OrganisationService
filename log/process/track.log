@@ -1,0 +1,4 @@
+2026-06-04 16:40:57 [http-nio-9329-exec-9] INFO  tracklogger - Fetching organisation entities | page=0, size=10, sortBy=null, sortDir=null, search=null
+2026-06-04 16:40:57 [http-nio-9329-exec-9] INFO  tracklogger - Organisation entities fetched successfully | totalElements=6
+2026-06-04 16:41:13 [http-nio-9329-exec-10] INFO  tracklogger - Fetching organisations | page=0, size=10, sortBy=null, sortDir=null, search=null
+2026-06-04 16:41:13 [http-nio-9329-exec-10] INFO  tracklogger - Organisations fetched successfully | totalElements=1
