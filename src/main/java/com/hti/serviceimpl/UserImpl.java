@@ -1,4 +1,5 @@
 package com.hti.serviceimpl;
+import org.springframework.data.domain.Pageable;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value; // ← CORRECT
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -574,8 +574,6 @@ public ResponseEntity<?> resetPassword(String encryptData, ResetPasswordRequest 
                 .updatedAt(user.getUpdatedAt())
                 .build();
     }
-    
-    
     
     
     
