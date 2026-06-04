@@ -7,8 +7,12 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
+import com.hti.enums.Role;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -58,8 +62,9 @@ public class User {
     @Column(name = "entity_id")
     private UUID entityId;
     
+    @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
-    private String role;    
+    private Role role;  
 
     @Column(name = "status", nullable = false)
     private String status;
