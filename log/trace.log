@@ -1,0 +1,8 @@
+2026-06-05 10:47:22 [http-nio-9329-exec-3] INFO  tracklogger - Creating user | email=s.jenkins@apexlogistics.io username=sjenkinstech
+2026-06-05 10:47:23 [http-nio-9329-exec-3] ERROR tracklogger - Entity not found | entityId=a81cd31e-19db-4328-9654-2c09b3d1f862
+2026-06-05 10:47:43 [http-nio-9329-exec-5] INFO  tracklogger - Fetching organisation entities | page=0 size=10 sortBy=null sortDir=null search=null
+2026-06-05 10:47:43 [http-nio-9329-exec-5] INFO  tracklogger - Organisation entities fetched successfully | totalElements=11
+2026-06-05 10:48:57 [http-nio-9329-exec-7] INFO  tracklogger - Creating user | email=d.miller@apexlogistics.io username=dmilleradmin
+2026-06-05 10:48:58 [http-nio-9329-exec-7] INFO  tracklogger - User created successfully | id=95132cdc-8a20-4e34-ae59-a53b5e2ab851 email=d.miller@apexlogistics.io
+2026-06-05 10:56:18 [http-nio-9329-exec-2] INFO  tracklogger - Creating user | email=r.green@apexlogistics.io username=rgreenops
+2026-06-05 10:56:19 [http-nio-9329-exec-2] INFO  tracklogger - User created successfully | id=de3ee19b-5d84-4741-8efa-4122fc58df00 email=r.green@apexlogistics.io

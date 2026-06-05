@@ -34,18 +34,25 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OrganisationEntityImpl implements OrganisationEntityService {
 
-    private static final Logger logger = LoggerFactory.getLogger("tracklogger");
+    private static final Logger logger   = LoggerFactory.getLogger("tracklogger");
+    private static final Logger dbLogger = LoggerFactory.getLogger("dblogger");
 
     private final OrganisationEntityRepository repository;
-    private final OrganisationRepository organisationRepository; 
+    private final OrganisationRepository organisationRepository;
+
+    // =========================================================================
+    // CREATE
+    // =========================================================================
     @Override
     public ResponseEntity<?> create(OrganisationEntityRequest request) {
         logger.info("Creating entity | type={} orgId={}", request.getEntityType(), request.getOrganisationId());
-     
+
+        dbLogger.info("DB SELECT | table=organisation | action=existsById | orgId={}", request.getOrganisationId());
         if (!organisationRepository.existsById(request.getOrganisationId())) {
             logger.error("Organisation not found | orgId={}", request.getOrganisationId());
             throw new NotFoundException("Organisation not found: " + request.getOrganisationId());
         }
+
         try {
             OrganisationEntity entity = OrganisationEntity.builder()
                     .organisationId(request.getOrganisationId())
@@ -53,65 +60,85 @@ public class OrganisationEntityImpl implements OrganisationEntityService {
                     .priority(request.getPriority())
                     .attributes(request.getAttributes())
                     .build();
+
+            dbLogger.info("DB INSERT | table=organisation_entity | type={} orgId={}",
+                    request.getEntityType(), request.getOrganisationId());
             entity = repository.save(entity);
+            dbLogger.info("DB INSERT success | table=organisation_entity | id={}", entity.getId());
+
             logger.info("Entity created successfully | id={} type={}", entity.getId(), entity.getEntityType());
             return ResponseEntity.status(HttpStatus.CREATED).body(toResponse(entity));
+
         } catch (Exception ex) {
             logger.error("Error creating entity | type={}", request.getEntityType(), ex);
             throw new InternalServerException("Failed to create entity: " + ex.getMessage());
         }
     }
 
-   @Override
-public ResponseEntity<?> update(UUID id, OrganisationEntityUpdateRequest request) {
-    logger.info("Updating entity | id={}", id);
+    // =========================================================================
+    // UPDATE
+    // =========================================================================
+    @Override
+    public ResponseEntity<?> update(UUID id, OrganisationEntityUpdateRequest request) {
+        logger.info("Updating entity | id={}", id);
 
-    OrganisationEntity entity = repository.findById(id).orElseThrow(() -> {
-        logger.error("Entity not found | id={}", id);
-        return new NotFoundException("Entity not found: " + id);
-    });
+        OrganisationEntity entity = repository.findById(id).orElseThrow(() -> {
+            logger.error("Entity not found | id={}", id);
+            return new NotFoundException("Entity not found: " + id);
+        });
 
-    try {
-        if (request.getEntityType() != null)
-            entity.setEntityType(request.getEntityType());
+        try {
+            if (request.getEntityType()  != null) entity.setEntityType(request.getEntityType());
+            if (request.getPriority()    != null) entity.setPriority(request.getPriority());
+            if (request.getAttributes()  != null) entity.setAttributes(request.getAttributes());
 
-        if (request.getPriority() != null)
-            entity.setPriority(request.getPriority());
+            dbLogger.info("DB UPDATE | table=organisation_entity | id={}", id);
+            entity = repository.save(entity);
+            dbLogger.info("DB UPDATE success | table=organisation_entity | id={}", entity.getId());
 
-        if (request.getAttributes() != null)
-            entity.setAttributes(request.getAttributes());
+            logger.info("Entity updated successfully | id={}", entity.getId());
+            return ResponseEntity.ok(toResponse(entity));
 
-        entity = repository.save(entity);
-        logger.info("Entity updated successfully | id={}", entity.getId());
-        return ResponseEntity.ok(toResponse(entity));
-
-    } catch (Exception ex) {
-        logger.error("Error updating entity | id={}", id, ex);
-        throw new InternalServerException("Failed to update entity: " + ex.getMessage());
+        } catch (Exception ex) {
+            logger.error("Error updating entity | id={}", id, ex);
+            throw new InternalServerException("Failed to update entity: " + ex.getMessage());
+        }
     }
-}
 
+    // =========================================================================
+    // DELETE
+    // =========================================================================
     @Override
     public ResponseEntity<?> delete(UUID id) {
         logger.info("Deleting entity | id={}", id);
+
         if (!repository.existsById(id)) {
             logger.error("Entity not found | id={}", id);
             throw new NotFoundException("Entity not found: " + id);
         }
+
         try {
+            dbLogger.info("DB DELETE | table=organisation_entity | id={}", id);
             repository.deleteById(id);
+            dbLogger.info("DB DELETE success | table=organisation_entity | id={}", id);
+
             logger.info("Entity deleted successfully | id={}", id);
             return ResponseEntity.ok("Entity deleted successfully");
+
         } catch (Exception ex) {
             logger.error("Error deleting entity | id={}", id, ex);
             throw new InternalServerException("Failed to delete entity: " + ex.getMessage());
         }
     }
 
+    // =========================================================================
+    // GET BY ID
+    // =========================================================================
     @Override
     public ResponseEntity<?> getById(UUID id) {
         logger.info("Fetching entity | id={}", id);
 
+        dbLogger.info("DB SELECT | table=organisation_entity | id={}", id);
         OrganisationEntity entity = repository.findById(id).orElseThrow(() -> {
             logger.error("Entity not found | id={}", id);
             return new NotFoundException("Entity not found: " + id);
@@ -121,10 +148,13 @@ public ResponseEntity<?> update(UUID id, OrganisationEntityUpdateRequest request
         return ResponseEntity.ok(toResponse(entity));
     }
 
+    // =========================================================================
+    // GET ALL
+    // =========================================================================
     @Override
     public ResponseEntity<?> getAll(int page, int size, String sortBy, String sortDirection,
                                     String search, String entityType, Integer priority, UUID organisationId) {
-        logger.info("Fetching organisation entities | page={}, size={}, sortBy={}, sortDir={}, search={}",
+        logger.info("Fetching organisation entities | page={} size={} sortBy={} sortDir={} search={}",
                 page, size, sortBy, sortDirection, search);
         try {
             int safePage = Math.max(page, 0);
@@ -137,10 +167,13 @@ public ResponseEntity<?> update(UUID id, OrganisationEntityUpdateRequest request
             Pageable pageable = PageRequest.of(safePage, safeSize, Sort.by(direction, sortField));
 
             Specification<OrganisationEntity> spec = buildOrganisationEntitySpec(
-                    search, entityType, priority, organisationId
-            );
+                    search, entityType, priority, organisationId);
 
+            dbLogger.info("DB SELECT | table=organisation_entity | page={} size={} search={}",
+                    safePage, safeSize, search);
             Page<OrganisationEntity> result = repository.findAll(spec, pageable);
+            dbLogger.info("DB SELECT success | table=organisation_entity | totalElements={}",
+                    result.getTotalElements());
 
             if (result.getTotalElements() == 0) {
                 throw new NotFoundException("No Organisation Entity found.");
@@ -168,37 +201,17 @@ public ResponseEntity<?> update(UUID id, OrganisationEntityUpdateRequest request
         }
     }
 
-    private Specification<OrganisationEntity> buildOrganisationEntitySpec(String search, String entityType,
-                                                                           Integer priority, UUID organisationId) {
-        return (root, query, cb) -> {
-            List<Predicate> predicates = new ArrayList<>();
-
-            if (search != null && !search.isBlank()) {
-                String like = "%" + search.toLowerCase() + "%";
-                predicates.add(cb.or(
-                        cb.like(cb.lower(root.get("entityType")),     like)       
-                ));
-            }
-
-            if (entityType != null && !entityType.isBlank())
-                predicates.add(cb.equal(cb.lower(root.get("entityType")), entityType.toLowerCase()));
-
-            if (priority != null)
-                predicates.add(cb.equal(root.get("priority"), priority));
-
-            if (organisationId != null)
-                predicates.add(cb.equal(root.get("organisationId"), organisationId));
-
-            return cb.and(predicates.toArray(new Predicate[0]));
-        };
-    }
-
+    // =========================================================================
+    // GET BY ORGANISATION
+    // =========================================================================
     @Override
     public ResponseEntity<?> getByOrganisation(UUID organisationId) {
         logger.info("Fetching entities by org | orgId={}", organisationId);
 
+        dbLogger.info("DB SELECT | table=organisation_entity | orgId={}", organisationId);
         List<OrganisationEntityResponse> list = repository.findByOrganisationId(organisationId)
                 .stream().map(this::toResponse).collect(Collectors.toList());
+        dbLogger.info("DB SELECT success | table=organisation_entity | orgId={} count={}", organisationId, list.size());
 
         if (list.isEmpty()) {
             logger.error("No entities found | orgId={}", organisationId);
@@ -209,12 +222,17 @@ public ResponseEntity<?> update(UUID id, OrganisationEntityUpdateRequest request
         return ResponseEntity.ok(list);
     }
 
+    // =========================================================================
+    // GET BY ENTITY TYPE
+    // =========================================================================
     @Override
     public ResponseEntity<?> getByEntityType(String entityType) {
         logger.info("Fetching entities by type | type={}", entityType);
 
+        dbLogger.info("DB SELECT | table=organisation_entity | entityType={}", entityType);
         List<OrganisationEntityResponse> list = repository.findByEntityType(entityType)
                 .stream().map(this::toResponse).collect(Collectors.toList());
+        dbLogger.info("DB SELECT success | table=organisation_entity | entityType={} count={}", entityType, list.size());
 
         if (list.isEmpty()) {
             logger.error("No entities found | type={}", entityType);
@@ -225,14 +243,21 @@ public ResponseEntity<?> update(UUID id, OrganisationEntityUpdateRequest request
         return ResponseEntity.ok(list);
     }
 
+    // =========================================================================
+    // SEARCH BY ATTRIBUTE
+    // =========================================================================
     @Override
     public ResponseEntity<?> searchByAttribute(UUID organisationId, String key, String value) {
         logger.info("Searching entity by attribute | orgId={} key={} value={}", organisationId, key, value);
 
         try {
+            dbLogger.info("DB SELECT | table=organisation_entity | action=searchByAttribute | orgId={} key={} value={}",
+                    organisationId, key, value);
             List<OrganisationEntityResponse> list = repository
                     .findByOrganisationIdAndAttribute(organisationId, key, value)
                     .stream().map(this::toResponse).collect(Collectors.toList());
+            dbLogger.info("DB SELECT success | table=organisation_entity | key={} value={} count={}",
+                    key, value, list.size());
 
             if (list.isEmpty()) {
                 logger.error("No entities found | key={} value={}", key, value);
@@ -250,6 +275,37 @@ public ResponseEntity<?> update(UUID id, OrganisationEntityUpdateRequest request
         }
     }
 
+    // =========================================================================
+    // SPEC BUILDER
+    // =========================================================================
+    private Specification<OrganisationEntity> buildOrganisationEntitySpec(String search, String entityType,
+                                                                           Integer priority, UUID organisationId) {
+        return (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (search != null && !search.isBlank()) {
+                String like = "%" + search.toLowerCase() + "%";
+                predicates.add(cb.or(
+                        cb.like(cb.lower(root.get("entityType")), like)
+                ));
+            }
+
+            if (entityType != null && !entityType.isBlank())
+                predicates.add(cb.equal(cb.lower(root.get("entityType")), entityType.toLowerCase()));
+
+            if (priority != null)
+                predicates.add(cb.equal(root.get("priority"), priority));
+
+            if (organisationId != null)
+                predicates.add(cb.equal(root.get("organisationId"), organisationId));
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+    }
+
+    // =========================================================================
+    // MAPPER
+    // =========================================================================
     private OrganisationEntityResponse toResponse(OrganisationEntity entity) {
         return OrganisationEntityResponse.builder()
                 .id(entity.getId())

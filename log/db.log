@@ -1,0 +1,190 @@
+2026-06-05 10:47:22 [http-nio-9329-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id 
+    from
+        users u1_0 
+    where
+        u1_0.email=? 
+    fetch
+        first ? rows only
+2026-06-05 10:47:22 [http-nio-9329-exec-3] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [s.jenkins@apexlogistics.io]
+2026-06-05 10:47:22 [http-nio-9329-exec-3] TRACE org.hibernate.orm.jdbc.bind - binding parameter (2:INTEGER) <- [1]
+2026-06-05 10:47:22 [http-nio-9329-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id 
+    from
+        users u1_0 
+    where
+        u1_0.username=? 
+    fetch
+        first ? rows only
+2026-06-05 10:47:22 [http-nio-9329-exec-3] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [sjenkinstech]
+2026-06-05 10:47:22 [http-nio-9329-exec-3] TRACE org.hibernate.orm.jdbc.bind - binding parameter (2:INTEGER) <- [1]
+2026-06-05 10:47:23 [http-nio-9329-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        count(*) 
+    from
+        organisation o1_0 
+    where
+        o1_0.id=?
+2026-06-05 10:47:23 [http-nio-9329-exec-3] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:UUID) <- [0b32158e-c5d0-4c7c-b27a-dd441b0c678d]
+2026-06-05 10:47:23 [http-nio-9329-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        count(*) 
+    from
+        organisation_entity oe1_0 
+    where
+        oe1_0.id=?
+2026-06-05 10:47:23 [http-nio-9329-exec-3] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:UUID) <- [a81cd31e-19db-4328-9654-2c09b3d1f862]
+2026-06-05 10:47:43 [http-nio-9329-exec-5] INFO  dblogger - DB SELECT | table=organisation_entity | page=0 size=10 search=null
+2026-06-05 10:47:43 [http-nio-9329-exec-5] DEBUG org.hibernate.SQL - 
+    select
+        oe1_0.id,
+        oe1_0.attributes,
+        oe1_0.created_at,
+        oe1_0.entity_type,
+        oe1_0.organisation_id,
+        oe1_0.priority,
+        oe1_0.updated_at 
+    from
+        organisation_entity oe1_0 
+    where
+        1=1 
+    order by
+        oe1_0.created_at desc 
+    offset
+        ? rows 
+    fetch
+        first ? rows only
+2026-06-05 10:47:43 [http-nio-9329-exec-5] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:INTEGER) <- [0]
+2026-06-05 10:47:43 [http-nio-9329-exec-5] TRACE org.hibernate.orm.jdbc.bind - binding parameter (2:INTEGER) <- [10]
+2026-06-05 10:47:43 [http-nio-9329-exec-5] DEBUG org.hibernate.SQL - 
+    select
+        count(oe1_0.id) 
+    from
+        organisation_entity oe1_0 
+    where
+        1=1
+2026-06-05 10:47:43 [http-nio-9329-exec-5] INFO  dblogger - DB SELECT success | table=organisation_entity | totalElements=11
+2026-06-05 10:48:57 [http-nio-9329-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id 
+    from
+        users u1_0 
+    where
+        u1_0.email=? 
+    fetch
+        first ? rows only
+2026-06-05 10:48:57 [http-nio-9329-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [d.miller@apexlogistics.io]
+2026-06-05 10:48:57 [http-nio-9329-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (2:INTEGER) <- [1]
+2026-06-05 10:48:57 [http-nio-9329-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id 
+    from
+        users u1_0 
+    where
+        u1_0.username=? 
+    fetch
+        first ? rows only
+2026-06-05 10:48:57 [http-nio-9329-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [dmilleradmin]
+2026-06-05 10:48:57 [http-nio-9329-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (2:INTEGER) <- [1]
+2026-06-05 10:48:57 [http-nio-9329-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        count(*) 
+    from
+        organisation o1_0 
+    where
+        o1_0.id=?
+2026-06-05 10:48:57 [http-nio-9329-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:UUID) <- [fc7c5a19-83f0-4c27-b15e-217de7e2b438]
+2026-06-05 10:48:57 [http-nio-9329-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        count(*) 
+    from
+        organisation_entity oe1_0 
+    where
+        oe1_0.id=?
+2026-06-05 10:48:57 [http-nio-9329-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:UUID) <- [2b6155a9-462f-4721-9923-5e05f351a504]
+2026-06-05 10:48:57 [http-nio-9329-exec-7] INFO  dblogger - DB INSERT | table=users | email=d.miller@apexlogistics.io orgId=fc7c5a19-83f0-4c27-b15e-217de7e2b438
+2026-06-05 10:48:58 [http-nio-9329-exec-7] DEBUG org.hibernate.SQL - 
+    insert 
+    into
+        users
+        (created_at, email, entity_id, first_name, last_login_at, last_name, organisation_id, password, phone, role, status, updated_at, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2026-06-05 10:48:58 [http-nio-9329-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:TIMESTAMP) <- [2026-06-05T10:48:58.062078]
+2026-06-05 10:48:58 [http-nio-9329-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (2:VARCHAR) <- [d.miller@apexlogistics.io]
+2026-06-05 10:48:58 [http-nio-9329-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (3:UUID) <- [2b6155a9-462f-4721-9923-5e05f351a504]
+2026-06-05 10:48:58 [http-nio-9329-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (4:VARCHAR) <- [David]
+2026-06-05 10:48:58 [http-nio-9329-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (5:TIMESTAMP) <- [null]
+2026-06-05 10:48:58 [http-nio-9329-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (6:VARCHAR) <- [Miller]
+2026-06-05 10:48:58 [http-nio-9329-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (7:UUID) <- [fc7c5a19-83f0-4c27-b15e-217de7e2b438]
+2026-06-05 10:48:58 [http-nio-9329-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (8:VARCHAR) <- [jK3$vP9!mQ_2xR]
+2026-06-05 10:48:58 [http-nio-9329-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (9:VARCHAR) <- [80899110513]
+2026-06-05 10:48:58 [http-nio-9329-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (10:VARCHAR) <- [ADMIN]
+2026-06-05 10:48:58 [http-nio-9329-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (11:VARCHAR) <- [ACTIVE]
+2026-06-05 10:48:58 [http-nio-9329-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (12:TIMESTAMP) <- [2026-06-05T10:48:58.062078]
+2026-06-05 10:48:58 [http-nio-9329-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (13:VARCHAR) <- [dmilleradmin]
+2026-06-05 10:48:58 [http-nio-9329-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (14:UUID) <- [95132cdc-8a20-4e34-ae59-a53b5e2ab851]
+2026-06-05 10:48:58 [http-nio-9329-exec-7] INFO  dblogger - DB INSERT success | table=users | id=95132cdc-8a20-4e34-ae59-a53b5e2ab851
+2026-06-05 10:56:18 [http-nio-9329-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id 
+    from
+        users u1_0 
+    where
+        u1_0.email=? 
+    fetch
+        first ? rows only
+2026-06-05 10:56:18 [http-nio-9329-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [r.green@apexlogistics.io]
+2026-06-05 10:56:18 [http-nio-9329-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (2:INTEGER) <- [1]
+2026-06-05 10:56:18 [http-nio-9329-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id 
+    from
+        users u1_0 
+    where
+        u1_0.username=? 
+    fetch
+        first ? rows only
+2026-06-05 10:56:18 [http-nio-9329-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [rgreenops]
+2026-06-05 10:56:18 [http-nio-9329-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (2:INTEGER) <- [1]
+2026-06-05 10:56:19 [http-nio-9329-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        count(*) 
+    from
+        organisation o1_0 
+    where
+        o1_0.id=?
+2026-06-05 10:56:19 [http-nio-9329-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:UUID) <- [fc7c5a19-83f0-4c27-b15e-217de7e2b438]
+2026-06-05 10:56:19 [http-nio-9329-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        count(*) 
+    from
+        organisation_entity oe1_0 
+    where
+        oe1_0.id=?
+2026-06-05 10:56:19 [http-nio-9329-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:UUID) <- [2b6155a9-462f-4721-9923-5e05f351a504]
+2026-06-05 10:56:19 [http-nio-9329-exec-2] INFO  dblogger - DB INSERT | table=users | email=r.green@apexlogistics.io orgId=fc7c5a19-83f0-4c27-b15e-217de7e2b438
+2026-06-05 10:56:19 [http-nio-9329-exec-2] DEBUG org.hibernate.SQL - 
+    insert 
+    into
+        users
+        (created_at, email, entity_id, first_name, last_login_at, last_name, organisation_id, password, phone, role, status, updated_at, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2026-06-05 10:56:19 [http-nio-9329-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:TIMESTAMP) <- [2026-06-05T10:56:19.351475]
+2026-06-05 10:56:19 [http-nio-9329-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (2:VARCHAR) <- [r.green@apexlogistics.io]
+2026-06-05 10:56:19 [http-nio-9329-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (3:UUID) <- [2b6155a9-462f-4721-9923-5e05f351a504]
+2026-06-05 10:56:19 [http-nio-9329-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (4:VARCHAR) <- [Rachel]
+2026-06-05 10:56:19 [http-nio-9329-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (5:TIMESTAMP) <- [null]
+2026-06-05 10:56:19 [http-nio-9329-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (6:VARCHAR) <- [Green]
+2026-06-05 10:56:19 [http-nio-9329-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (7:UUID) <- [fc7c5a19-83f0-4c27-b15e-217de7e2b438]
+2026-06-05 10:56:19 [http-nio-9329-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (8:VARCHAR) <- [zQ7#mL2!vP_4xT]
+2026-06-05 10:56:19 [http-nio-9329-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (9:VARCHAR) <- [9108991105]
+2026-06-05 10:56:19 [http-nio-9329-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (10:VARCHAR) <- [USER]
+2026-06-05 10:56:19 [http-nio-9329-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (11:VARCHAR) <- [ACTIVE]
+2026-06-05 10:56:19 [http-nio-9329-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (12:TIMESTAMP) <- [2026-06-05T10:56:19.352472]
+2026-06-05 10:56:19 [http-nio-9329-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (13:VARCHAR) <- [rgreenops]
+2026-06-05 10:56:19 [http-nio-9329-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (14:UUID) <- [de3ee19b-5d84-4741-8efa-4122fc58df00]
+2026-06-05 10:56:19 [http-nio-9329-exec-2] INFO  dblogger - DB INSERT success | table=users | id=de3ee19b-5d84-4741-8efa-4122fc58df00
