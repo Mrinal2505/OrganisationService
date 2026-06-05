@@ -58,10 +58,10 @@
 
 		<!-- ───── Internal Module ───── -->
 		<dependency>
-			<groupId>com.hti</groupId>
-			<artifactId>hrims-common</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
+    <groupId>com.hti</groupId>
+    <artifactId>hrims-common</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+</dependency>
 
 		<!-- ───── OpenAPI / Swagger ───── -->
 		<dependency>
@@ -120,6 +120,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+				<mainClass>com.hti.OrganisationApplication</mainClass>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
