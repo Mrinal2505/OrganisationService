@@ -16,11 +16,10 @@ public interface OrganisationEntityService {
             String sortBy,
             String sortDirection,
             String search,
-            String entityType,
             Integer priority,
-            UUID organisationId
+            UUID organisationId,
+            Boolean isActive
     );
     ResponseEntity<?> getByOrganisation(UUID organisationId);
-    ResponseEntity<?> getByEntityType(String entityType);
     ResponseEntity<?> searchByAttribute(UUID organisationId, String key, String value);
 }

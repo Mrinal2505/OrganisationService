@@ -16,11 +16,13 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class Entitymetadataresponse {
-
     private UUID id;
     private UUID organisationId;
-    private UUID entityId;
+    private String entityType;
     private Map<String, Object> metadata;
+    private boolean isActive;
+    private String createdBy;
+    private String updatedBy;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

@@ -16,4 +16,8 @@ import lombok.Setter;
 public class Entitymetadataupdaterequest {
 
     private Map<String, Object> metadata;
+
+    private Boolean isActive;
+
+    private String updatedBy;
 }

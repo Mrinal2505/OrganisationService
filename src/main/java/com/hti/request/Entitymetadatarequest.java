@@ -3,6 +3,7 @@ package com.hti.request;
 import java.util.Map;
 import java.util.UUID;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,8 +21,10 @@ public class Entitymetadatarequest {
     @NotNull(message = "Organisation ID is required")
     private UUID organisationId;
 
-    @NotNull(message = "Entity ID is required")
-    private UUID entityId;
+    @NotBlank(message = "Entity type is required")
+    private String entityType;
 
     private Map<String, Object> metadata;
+
+    private String createdBy;
 }

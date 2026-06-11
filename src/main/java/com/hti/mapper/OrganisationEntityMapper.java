@@ -11,9 +11,12 @@ public class OrganisationEntityMapper {
         return OrganisationEntityResponse.builder()
                 .id(entity.getId())
                 .organisationId(entity.getOrganisationId())
-                .entityType(entity.getEntityType())
+                .metaId(entity.getMetaId())
                 .priority(entity.getPriority())
                 .attributes(entity.getAttributes())
+                .isActive(entity.isActive())
+                .createdBy(entity.getCreatedBy())
+                .updatedBy(entity.getUpdatedBy())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();

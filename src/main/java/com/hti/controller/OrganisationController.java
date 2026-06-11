@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,31 +44,32 @@ public class OrganisationController {
             @RequestParam(required = false)    String sortBy,
             @RequestParam(required = false)    String sortDirection,
             @RequestParam(required = false)    String search,
-            @RequestParam(required = false)    String organizationType,
+            @RequestParam(required = false)    String organisationType,
             @RequestParam(required = false)    String industryType,
             @RequestParam(required = false)    String city,
             @RequestParam(required = false)    String state,
-            @RequestParam(required = false)    String country
+            @RequestParam(required = false)    String country,
+            @RequestParam(required = false)    Boolean isActive
     ) {
         return service.getAll(page, size, sortBy, sortDirection, search,
-                organizationType, industryType, city, state, country);
+                organisationType, industryType, city, state, country, isActive);
     }
 
     @Operation(summary = "Get organisation by ID", description = "Fetch a single organisation by ID")
     @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@RequestParam UUID id) {
+    public ResponseEntity<?> getById(@PathVariable UUID id) {
         return service.getById(id);
     }
 
     @Operation(summary = "Update organisation", description = "Update an existing organisation by ID")
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<?> update(@RequestParam UUID id, @Valid @RequestBody OrganisationUpdateRequest request) {
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable UUID id, @Valid @RequestBody OrganisationUpdateRequest request) {
         return service.update(id, request);
     }
 
     @Operation(summary = "Delete organisation", description = "Delete an organisation by ID")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@RequestParam UUID id) {
+    public ResponseEntity<?> delete(@PathVariable UUID id) {
         return service.delete(id);
     }
 }

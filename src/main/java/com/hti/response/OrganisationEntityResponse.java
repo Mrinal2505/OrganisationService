@@ -18,9 +18,12 @@ import lombok.Setter;
 public class OrganisationEntityResponse {
     private UUID id;
     private UUID organisationId;
-    private String entityType;
+    private UUID metaId;
     private Integer priority;
     private Map<String, Object> attributes;
+    private boolean isActive;
+    private String createdBy;
+    private String updatedBy;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

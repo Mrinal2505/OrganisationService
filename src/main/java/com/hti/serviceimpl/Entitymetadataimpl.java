@@ -1,8 +1,8 @@
 package com.hti.serviceimpl;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -17,6 +17,7 @@ import com.hti.Repository.EntityMetadataRepository;
 import com.hti.Repository.OrganisationEntityRepository;
 import com.hti.Repository.OrganisationRepository;
 import com.hti.entity.EntityMetadata;
+import com.hti.exception.BadRequestException;
 import com.hti.exception.InternalServerException;
 import com.hti.exception.NotFoundException;
 import com.hti.mapper.Entitymetadatamapper;
@@ -47,7 +48,7 @@ public class Entitymetadataimpl implements Entitymetadataservice {
     @Override
     @Transactional
     public ResponseEntity<?> create(Entitymetadatarequest request) {
-        logger.info("Creating entity metadata | orgId={} entityId={}", request.getOrganisationId(), request.getEntityId());
+        logger.info("Creating entity metadata | orgId={} entityType={}", request.getOrganisationId(), request.getEntityType());
         dbLogger.info("DB check – organisation exists | orgId={}", request.getOrganisationId());
 
         if (!organisationRepository.existsById(request.getOrganisationId())) {
@@ -56,28 +57,31 @@ public class Entitymetadataimpl implements Entitymetadataservice {
             throw new NotFoundException("Organisation not found: " + request.getOrganisationId());
         }
 
-        dbLogger.info("DB check – organisation entity exists | entityId={}", request.getEntityId());
-        if (!organisationEntityRepository.existsById(request.getEntityId())) {
-            logger.error("Organisation entity not found | entityId={}", request.getEntityId());
-            dbLogger.error("DB check – organisation entity not found | entityId={}", request.getEntityId());
-            throw new NotFoundException("Organisation entity not found: " + request.getEntityId());
+        dbLogger.info("DB check – entity metadata duplicate | orgId={} entityType={}", request.getOrganisationId(), request.getEntityType());
+        if (repository.existsByOrganisationIdAndEntityType(request.getOrganisationId(), request.getEntityType())) {
+            logger.error("Entity metadata already exists | orgId={} entityType={}", request.getOrganisationId(), request.getEntityType());
+            dbLogger.error("DB check – entity metadata duplicate | orgId={} entityType={}", request.getOrganisationId(), request.getEntityType());
+            throw new BadRequestException("Entity metadata already exists for organisation and entity type: " + request.getEntityType());
         }
 
         try {
             EntityMetadata entityMetadata = EntityMetadata.builder()
                     .organisationId(request.getOrganisationId())
-                    .entityId(request.getEntityId())
+                    .entityType(request.getEntityType())
                     .metadata(request.getMetadata())
+                    .createdBy(request.getCreatedBy())
                     .build();
 
-            dbLogger.info("DB insert – saving entity metadata | orgId={} entityId={}", request.getOrganisationId(), request.getEntityId());
+            dbLogger.info("DB insert – saving entity metadata | orgId={} entityType={}", request.getOrganisationId(), request.getEntityType());
             entityMetadata = repository.save(entityMetadata);
             logger.info("Entity metadata created successfully | id={}", entityMetadata.getId());
             dbLogger.info("DB insert – entity metadata saved successfully | id={}", entityMetadata.getId());
             return ResponseEntity.status(HttpStatus.CREATED).body(Entitymetadatamapper.toResponse(entityMetadata));
 
+        } catch (BadRequestException ex) {
+            throw ex;
         } catch (Exception ex) {
-            logger.error("Error creating entity metadata | orgId={} entityId={}", request.getOrganisationId(), request.getEntityId(), ex);
+            logger.error("Error creating entity metadata | orgId={}", request.getOrganisationId(), ex);
             dbLogger.error("DB insert failed | error={}", ex.getMessage());
             throw new InternalServerException("Failed to create entity metadata: " + ex.getMessage());
         }
@@ -95,9 +99,28 @@ public class Entitymetadataimpl implements Entitymetadataservice {
             return new NotFoundException("Entity metadata not found: " + id);
         });
 
+        // Guard – if metadata keys are changing, block if entities are already linked
+        if (request.getMetadata() != null) {
+            dbLogger.info("DB check – checking linked entities before metadata key update | id={}", id);
+            boolean hasLinkedEntities = !organisationEntityRepository.findByMetaId(id).isEmpty();
+            if (hasLinkedEntities) {
+                Set<String> existingKeys = entityMetadata.getMetadata() != null
+                        ? entityMetadata.getMetadata().keySet() : Set.of();
+                Set<String> newKeys = request.getMetadata().keySet();
+                if (!existingKeys.equals(newKeys)) {
+                    logger.error("Cannot change metadata keys – entities already linked | id={}", id);
+                    dbLogger.error("DB check – metadata key change blocked, linked entities exist | id={}", id);
+                    throw new BadRequestException(
+                            "Cannot change metadata keys — organisation entities are already linked to this template. " +
+                            "Existing keys: " + existingKeys + ". Attempted keys: " + newKeys);
+                }
+            }
+            entityMetadata.setMetadata(request.getMetadata());
+        }
+
         try {
-            if (request.getMetadata() != null)
-                entityMetadata.setMetadata(request.getMetadata());
+            if (request.getIsActive()  != null) entityMetadata.setActive(request.getIsActive());
+            if (request.getUpdatedBy() != null) entityMetadata.setUpdatedBy(request.getUpdatedBy());
 
             dbLogger.info("DB update – saving entity metadata | id={}", id);
             entityMetadata = repository.save(entityMetadata);
@@ -105,6 +128,8 @@ public class Entitymetadataimpl implements Entitymetadataservice {
             dbLogger.info("DB update – entity metadata saved successfully | id={}", entityMetadata.getId());
             return ResponseEntity.ok(Entitymetadatamapper.toResponse(entityMetadata));
 
+        } catch (BadRequestException ex) {
+            throw ex;
         } catch (Exception ex) {
             logger.error("Error updating entity metadata | id={}", id, ex);
             dbLogger.error("DB update failed | id={} error={}", id, ex.getMessage());
@@ -123,6 +148,18 @@ public class Entitymetadataimpl implements Entitymetadataservice {
             dbLogger.error("DB select – entity metadata not found | id={}", id);
             return new NotFoundException("Entity metadata not found: " + id);
         });
+
+        // Guard – block delete if organisation entities are still referencing this metaId
+        dbLogger.info("DB check – checking linked entities before delete | id={}", id);
+        List<?> linkedEntities = organisationEntityRepository.findByMetaId(id);
+        if (!linkedEntities.isEmpty()) {
+            logger.error("Cannot delete entity metadata – linked entities exist | id={} count={}", id, linkedEntities.size());
+            dbLogger.error("DB check – delete blocked, linked entities exist | id={} count={}", id, linkedEntities.size());
+            throw new BadRequestException(
+                    "Cannot delete entity metadata — " + linkedEntities.size() +
+                    " organisation entity/entities are still referencing this template. " +
+                    "Delete or unlink those entities first.");
+        }
 
         try {
             dbLogger.info("DB delete – removing entity metadata | id={}", id);
@@ -156,10 +193,10 @@ public class Entitymetadataimpl implements Entitymetadataservice {
 
     @Override
     public ResponseEntity<?> getAll(int page, int size, String sortBy, String sortDirection,
-            String search, UUID organisationId, UUID entityId) {
+            String search, UUID organisationId, String entityType, Boolean isActive) {
         logger.info("Fetching entity metadata | page={} size={} sortBy={} sortDir={} search={}",
                 page, size, sortBy, sortDirection, search);
-        dbLogger.info("DB select – querying entity metadata with filters | orgId={} entityId={}", organisationId, entityId);
+        dbLogger.info("DB select – querying entity metadata | orgId={} entityType={} isActive={}", organisationId, entityType, isActive);
 
         try {
             int safePage   = Math.max(page, 0);
@@ -171,7 +208,7 @@ public class Entitymetadataimpl implements Entitymetadataservice {
             Pageable pageable = PageRequest.of(safePage, safeSize, Sort.by(dir, sortField));
 
             Page<EntityMetadata> result = repository.findAll(
-                    Entitymetadataspecification.buildSpec(search, organisationId, entityId),
+                    Entitymetadataspecification.buildSpec(search, organisationId, entityType, isActive),
                     pageable);
 
             if (result.getTotalElements() == 0) {
@@ -203,25 +240,6 @@ public class Entitymetadataimpl implements Entitymetadataservice {
     }
 
     @Override
-    public ResponseEntity<?> getByEntityId(UUID entityId) {
-        logger.info("Fetching entity metadata by entityId | entityId={}", entityId);
-        dbLogger.info("DB select – fetching entity metadata by entityId | entityId={}", entityId);
-
-        List<Entitymetadataresponse> list = repository.findByEntityId(entityId)
-                .stream().map(Entitymetadatamapper::toResponse).toList();
-
-        if (list.isEmpty()) {
-            logger.error("No entity metadata found | entityId={}", entityId);
-            dbLogger.error("DB select – no entity metadata found | entityId={}", entityId);
-            throw new NotFoundException("No entity metadata found for entity: " + entityId);
-        }
-
-        logger.info("Entity metadata fetched successfully | entityId={} count={}", entityId, list.size());
-        dbLogger.info("DB select – entity metadata fetched | entityId={} count={}", entityId, list.size());
-        return ResponseEntity.ok(list);
-    }
-
-    @Override
     public ResponseEntity<?> getByOrganisationId(UUID organisationId) {
         logger.info("Fetching entity metadata by orgId | orgId={}", organisationId);
         dbLogger.info("DB select – fetching entity metadata by orgId | orgId={}", organisationId);
@@ -237,6 +255,25 @@ public class Entitymetadataimpl implements Entitymetadataservice {
 
         logger.info("Entity metadata fetched successfully | orgId={} count={}", organisationId, list.size());
         dbLogger.info("DB select – entity metadata fetched | orgId={} count={}", organisationId, list.size());
+        return ResponseEntity.ok(list);
+    }
+
+    @Override
+    public ResponseEntity<?> getByEntityType(String entityType) {
+        logger.info("Fetching entity metadata by entityType | entityType={}", entityType);
+        dbLogger.info("DB select – fetching entity metadata by entityType | entityType={}", entityType);
+
+        List<Entitymetadataresponse> list = repository.findByEntityType(entityType)
+                .stream().map(Entitymetadatamapper::toResponse).toList();
+
+        if (list.isEmpty()) {
+            logger.error("No entity metadata found | entityType={}", entityType);
+            dbLogger.error("DB select – no entity metadata found | entityType={}", entityType);
+            throw new NotFoundException("No entity metadata found for entity type: " + entityType);
+        }
+
+        logger.info("Entity metadata fetched successfully | entityType={} count={}", entityType, list.size());
+        dbLogger.info("DB select – entity metadata fetched | entityType={} count={}", entityType, list.size());
         return ResponseEntity.ok(list);
     }
 }

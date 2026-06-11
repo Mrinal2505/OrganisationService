@@ -4,8 +4,11 @@ import java.util.Map;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -14,14 +17,13 @@ import lombok.*;
 @Builder
 public class OrganisationEntityUpdateRequest {
 
-    @NotBlank(message = "Entity type is required")
-    private String entityType;
-
     @Min(value = 1, message = "Priority must be at least 1")
     @Max(value = 100, message = "Priority must be at most 100")
     private Integer priority;
 
     private Map<String, Object> attributes;
 
-  
+    private Boolean isActive;
+
+    private String updatedBy;
 }

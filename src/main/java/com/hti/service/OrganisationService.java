@@ -16,10 +16,11 @@ public interface OrganisationService {
             String sortBy,
             String sortDirection,
             String search,
-            String organizationType,
+            String organisationType,
             String industryType,
             String city,
             String state,
-            String country
+            String country,
+            Boolean isActive
     );
 }

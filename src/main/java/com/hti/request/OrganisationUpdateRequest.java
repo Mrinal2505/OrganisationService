@@ -1,5 +1,6 @@
 package com.hti.request;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -16,18 +17,15 @@ import lombok.Setter;
 @Builder
 public class OrganisationUpdateRequest {
 
-   
-    @NotBlank(message = "Organization name is required")
-    @Size(min = 2, max = 100, message = "Organization name must be between 2 and 100 characters")
-    private String organizationName;
+    @NotBlank(message = "Organisation name is required")
+    @Size(min = 2, max = 100, message = "Organisation name must be between 2 and 100 characters")
+    private String organisationName;
 
-  
-    private String organizationType;
+    private String organisationType;
 
     private String websiteUrl;
 
     private String logoUrl;
-
 
     private String industryType;
 
@@ -35,11 +33,21 @@ public class OrganisationUpdateRequest {
     private String phone;
 
     private String registeredAddress;
+
     private String city;
+
     private String state;
+
     private String country;
+
     private String postalCode;
+
     private String timezone;
 
-  
+    @Min(value = 1, message = "Number of employees must be at least 1")
+    private Integer numberOfEmployees;
+
+    private Boolean isActive;
+
+    private String updatedBy;
 }

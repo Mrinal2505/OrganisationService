@@ -1,0 +1,80 @@
+2026-06-08 16:46:16 [http-nio-9329-exec-9] INFO  dblogger - DB select – fetching entities by type | type=TEAM
+2026-06-08 16:46:16 [http-nio-9329-exec-9] ERROR dblogger - DB select – no entities found | type=TEAM
+2026-06-08 16:46:26 [http-nio-9329-exec-10] INFO  dblogger - DB select – fetching entities by type | type=DEPARTMENT
+2026-06-08 16:46:26 [http-nio-9329-exec-10] INFO  dblogger - DB select – entities fetched | type=DEPARTMENT count=4
+2026-06-08 16:53:07 [http-nio-9329-exec-4] INFO  dblogger - DB check – organisation existence by registrationNumber+domain+email | email=admin20260608@apex20260608.com
+2026-06-08 16:53:07 [http-nio-9329-exec-4] INFO  dblogger - DB insert – saving organisation | name=Apex Innovation Labs 20260608
+2026-06-08 16:53:07 [http-nio-9329-exec-4] INFO  dblogger - DB insert – organisation saved successfully | id=bd6cf3c4-2c79-45fc-bd5f-a8eecffe8ca6
+2026-06-08 16:54:38 [http-nio-9329-exec-1] INFO  dblogger - DB check – organisation exists | orgId=bd6cf3c4-2c79-45fc-bd5f-a8eecffe8ca6
+2026-06-08 16:54:38 [http-nio-9329-exec-1] INFO  dblogger - DB insert – saving entity | type=BRANCH orgId=bd6cf3c4-2c79-45fc-bd5f-a8eecffe8ca6
+2026-06-08 16:54:38 [http-nio-9329-exec-1] INFO  dblogger - DB insert – entity saved successfully | id=d0ce11bc-2c63-4825-ab46-297e12a85b18
+2026-06-08 16:54:56 [http-nio-9329-exec-2] INFO  dblogger - DB check – organisation exists | orgId=bd6cf3c4-2c79-45fc-bd5f-a8eecffe8ca6
+2026-06-08 16:54:56 [http-nio-9329-exec-2] INFO  dblogger - DB insert – saving entity | type=DEPARTMENT orgId=bd6cf3c4-2c79-45fc-bd5f-a8eecffe8ca6
+2026-06-08 16:54:56 [http-nio-9329-exec-2] INFO  dblogger - DB insert – entity saved successfully | id=064329c0-66da-4754-8ca2-6565b2f03e39
+2026-06-08 16:55:35 [http-nio-9329-exec-3] INFO  dblogger - DB select – fetching entities by orgId | orgId=bd6cf3c4-2c79-45fc-bd5f-a8eecffe8ca6
+2026-06-08 16:55:35 [http-nio-9329-exec-3] INFO  dblogger - DB select – entities fetched | orgId=bd6cf3c4-2c79-45fc-bd5f-a8eecffe8ca6 count=2
+2026-06-08 16:55:56 [http-nio-9329-exec-7] INFO  dblogger - DB select – fetching entity metadata by entityId | entityId=064329c0-66da-4754-8ca2-6565b2f03e39
+2026-06-08 16:55:56 [http-nio-9329-exec-7] ERROR dblogger - DB select – entity metadata not found | entityId=064329c0-66da-4754-8ca2-6565b2f03e39
+2026-06-08 16:56:38 [http-nio-9329-exec-8] INFO  dblogger - DB select – fetching entity metadata by entityId | entityId=bd6cf3c4-2c79-45fc-bd5f-a8eecffe8ca6
+2026-06-08 16:56:38 [http-nio-9329-exec-8] ERROR dblogger - DB select – entity metadata not found | entityId=bd6cf3c4-2c79-45fc-bd5f-a8eecffe8ca6
+2026-06-08 16:59:39 [http-nio-9329-exec-7] INFO  dblogger - DB check – organisation exists | orgId=bd6cf3c4-2c79-45fc-bd5f-a8eecffe8ca6
+2026-06-08 16:59:39 [http-nio-9329-exec-7] INFO  dblogger - DB insert – saving entity | type=DEPARTMENT orgId=bd6cf3c4-2c79-45fc-bd5f-a8eecffe8ca6
+2026-06-08 16:59:39 [http-nio-9329-exec-7] INFO  dblogger - DB insert – entity saved successfully | id=0ad94f26-8afe-4b67-b83b-daf443efc03e
+2026-06-08 17:00:08 [http-nio-9329-exec-8] INFO  dblogger - DB select – fetching entity metadata by entityId | entityId=0ad94f26-8afe-4b67-b83b-daf443efc03e
+2026-06-08 17:00:08 [http-nio-9329-exec-8] ERROR dblogger - DB select – entity metadata not found | entityId=0ad94f26-8afe-4b67-b83b-daf443efc03e
+2026-06-08 17:05:04 [http-nio-9329-exec-10] INFO  dblogger - DB select – fetching entities by orgId | orgId=bd6cf3c4-2c79-45fc-bd5f-a8eecffe8ca6
+2026-06-08 17:05:04 [http-nio-9329-exec-10] INFO  dblogger - DB select – entities fetched | orgId=bd6cf3c4-2c79-45fc-bd5f-a8eecffe8ca6 count=3
+2026-06-08 17:06:45 [http-nio-9329-exec-4] INFO  dblogger - DB check – organisation exists | orgId=bd6cf3c4-2c79-45fc-bd5f-a8eecffe8ca6
+2026-06-08 17:06:45 [http-nio-9329-exec-4] INFO  dblogger - DB check – organisation entity exists | entityId=d0ce11bc-2c63-4825-ab46-297e12a85b18
+2026-06-08 17:06:45 [http-nio-9329-exec-4] INFO  dblogger - DB check – entity metadata already exists | entityId=d0ce11bc-2c63-4825-ab46-297e12a85b18
+2026-06-08 17:06:45 [http-nio-9329-exec-4] INFO  dblogger - DB insert – saving entity metadata | entityId=d0ce11bc-2c63-4825-ab46-297e12a85b18
+2026-06-08 17:06:45 [http-nio-9329-exec-4] INFO  dblogger - DB insert – entity metadata saved successfully | entityId=d0ce11bc-2c63-4825-ab46-297e12a85b18
+2026-06-08 17:08:33 [http-nio-9329-exec-1] INFO  dblogger - DB check – organisation exists | orgId=bd6cf3c4-2c79-45fc-bd5f-a8eecffe8ca6
+2026-06-08 17:08:33 [http-nio-9329-exec-1] INFO  dblogger - DB check – organisation entity exists | entityId=d0ce11bc-2c63-4825-ab46-297e12a85b18
+2026-06-08 17:08:33 [http-nio-9329-exec-1] INFO  dblogger - DB check – entity metadata already exists | entityId=d0ce11bc-2c63-4825-ab46-297e12a85b18
+2026-06-08 17:08:33 [http-nio-9329-exec-1] ERROR dblogger - DB check – entity metadata duplicate | entityId=d0ce11bc-2c63-4825-ab46-297e12a85b18
+2026-06-08 17:08:41 [http-nio-9329-exec-2] INFO  dblogger - DB check – organisation exists | orgId=bd6cf3c4-2c79-45fc-bd5f-a8eecffe8ca6
+2026-06-08 17:08:41 [http-nio-9329-exec-2] INFO  dblogger - DB check – organisation entity exists | entityId=d0ce11bc-2c63-4825-ab46-297e12a85b18
+2026-06-08 17:08:41 [http-nio-9329-exec-2] INFO  dblogger - DB check – entity metadata already exists | entityId=d0ce11bc-2c63-4825-ab46-297e12a85b18
+2026-06-08 17:08:41 [http-nio-9329-exec-2] ERROR dblogger - DB check – entity metadata duplicate | entityId=d0ce11bc-2c63-4825-ab46-297e12a85b18
+2026-06-08 17:08:59 [http-nio-9329-exec-3] INFO  dblogger - DB select – querying entity metadata with filters | orgId=null entityId=null
+2026-06-08 17:08:59 [http-nio-9329-exec-3] INFO  dblogger - DB select – entity metadata query complete | totalElements=1
+2026-06-08 17:09:19 [http-nio-9329-exec-7] INFO  dblogger - DB check – organisation exists | orgId=bd6cf3c4-2c79-45fc-bd5f-a8eecffe8ca6
+2026-06-08 17:09:19 [http-nio-9329-exec-7] INFO  dblogger - DB check – organisation entity exists | entityId=064329c0-66da-4754-8ca2-6565b2f03e39
+2026-06-08 17:09:19 [http-nio-9329-exec-7] INFO  dblogger - DB check – entity metadata already exists | entityId=064329c0-66da-4754-8ca2-6565b2f03e39
+2026-06-08 17:09:19 [http-nio-9329-exec-7] INFO  dblogger - DB insert – saving entity metadata | entityId=064329c0-66da-4754-8ca2-6565b2f03e39
+2026-06-08 17:09:19 [http-nio-9329-exec-7] INFO  dblogger - DB insert – entity metadata saved successfully | entityId=064329c0-66da-4754-8ca2-6565b2f03e39
+2026-06-08 17:09:37 [http-nio-9329-exec-8] INFO  dblogger - DB check – organisation exists | orgId=bd6cf3c4-2c79-45fc-bd5f-a8eecffe8ca6
+2026-06-08 17:09:37 [http-nio-9329-exec-8] INFO  dblogger - DB check – organisation entity exists | entityId=d0ce11bc-2c63-4825-ab46-297e12a85b18
+2026-06-08 17:09:37 [http-nio-9329-exec-8] INFO  dblogger - DB check – entity metadata already exists | entityId=d0ce11bc-2c63-4825-ab46-297e12a85b18
+2026-06-08 17:09:37 [http-nio-9329-exec-8] ERROR dblogger - DB check – entity metadata duplicate | entityId=d0ce11bc-2c63-4825-ab46-297e12a85b18
+2026-06-08 17:10:52 [http-nio-9329-exec-10] INFO  dblogger - DB select – querying entity metadata with filters | orgId=null entityId=null
+2026-06-08 17:10:52 [http-nio-9329-exec-10] INFO  dblogger - DB select – entity metadata query complete | totalElements=2
+2026-06-08 17:13:20 [http-nio-9329-exec-4] INFO  dblogger - DB check – organisation exists | orgId=bd6cf3c4-2c79-45fc-bd5f-a8eecffe8ca6
+2026-06-08 17:13:20 [http-nio-9329-exec-4] INFO  dblogger - DB check – organisation entity exists | entityId=d0ce11bc-2c63-4825-ab46-297e12a85b18
+2026-06-08 17:13:20 [http-nio-9329-exec-4] INFO  dblogger - DB check – entity metadata already exists | entityId=d0ce11bc-2c63-4825-ab46-297e12a85b18
+2026-06-08 17:13:20 [http-nio-9329-exec-4] ERROR dblogger - DB check – entity metadata duplicate | entityId=d0ce11bc-2c63-4825-ab46-297e12a85b18
+2026-06-08 17:14:58 [http-nio-9329-exec-1] INFO  dblogger - DB check – organisation exists | orgId=bd6cf3c4-2c79-45fc-bd5f-a8eecffe8ca6
+2026-06-08 17:14:58 [http-nio-9329-exec-1] INFO  dblogger - DB check – organisation entity exists | entityId=d0ce11bc-2c63-4825-ab46-297e12a85b18
+2026-06-08 17:14:58 [http-nio-9329-exec-1] INFO  dblogger - DB check – entity metadata already exists | entityId=d0ce11bc-2c63-4825-ab46-297e12a85b18
+2026-06-08 17:14:58 [http-nio-9329-exec-1] ERROR dblogger - DB check – entity metadata duplicate | entityId=d0ce11bc-2c63-4825-ab46-297e12a85b18
+2026-06-08 17:24:22 [http-nio-9329-exec-3] INFO  dblogger - DB check – organisation exists | orgId=607e1998-a595-453d-b073-6b4c556be251
+2026-06-08 17:24:22 [http-nio-9329-exec-3] INFO  dblogger - DB check – organisation entity exists | entityId=6f05fe90-ea32-409c-aaf7-a8ba20b4f317
+2026-06-08 17:24:22 [http-nio-9329-exec-3] INFO  dblogger - DB check – entity metadata already exists | entityId=6f05fe90-ea32-409c-aaf7-a8ba20b4f317
+2026-06-08 17:24:22 [http-nio-9329-exec-3] INFO  dblogger - DB insert – saving entity metadata | entityId=6f05fe90-ea32-409c-aaf7-a8ba20b4f317
+2026-06-08 17:24:22 [http-nio-9329-exec-3] INFO  dblogger - DB insert – entity metadata saved successfully | entityId=6f05fe90-ea32-409c-aaf7-a8ba20b4f317
+2026-06-08 17:26:25 [http-nio-9329-exec-8] INFO  dblogger - DB check – organisation exists | orgId=607e1998-a595-453d-b073-6b4c556be251
+2026-06-08 17:26:25 [http-nio-9329-exec-8] INFO  dblogger - DB check – organisation entity exists | entityId=86dc3351-808f-4af9-83b0-55d83b4d2033
+2026-06-08 17:26:25 [http-nio-9329-exec-8] INFO  dblogger - DB check – entity metadata already exists | entityId=86dc3351-808f-4af9-83b0-55d83b4d2033
+2026-06-08 17:26:25 [http-nio-9329-exec-8] INFO  dblogger - DB insert – saving entity metadata | entityId=86dc3351-808f-4af9-83b0-55d83b4d2033
+2026-06-08 17:26:25 [http-nio-9329-exec-8] INFO  dblogger - DB insert – entity metadata saved successfully | entityId=86dc3351-808f-4af9-83b0-55d83b4d2033
+2026-06-08 17:26:45 [http-nio-9329-exec-9] INFO  dblogger - DB check – organisation exists | orgId=bd6cf3c4-2c79-45fc-bd5f-a8eecffe8ca6
+2026-06-08 17:26:45 [http-nio-9329-exec-9] INFO  dblogger - DB check – organisation entity exists | entityId=d0ce11bc-2c63-4825-ab46-297e12a85b18
+2026-06-08 17:26:45 [http-nio-9329-exec-9] INFO  dblogger - DB check – entity metadata already exists | entityId=d0ce11bc-2c63-4825-ab46-297e12a85b18
+2026-06-08 17:26:45 [http-nio-9329-exec-9] ERROR dblogger - DB check – entity metadata duplicate | entityId=d0ce11bc-2c63-4825-ab46-297e12a85b18
+2026-06-08 17:27:06 [http-nio-9329-exec-5] INFO  dblogger - DB check – organisation exists | orgId=bd6cf3c4-2c79-45fc-bd5f-a8eecffe8ca6
+2026-06-08 17:27:06 [http-nio-9329-exec-5] INFO  dblogger - DB check – organisation entity exists | entityId=064329c0-66da-4754-8ca2-6565b2f03e39
+2026-06-08 17:27:06 [http-nio-9329-exec-5] INFO  dblogger - DB check – entity metadata already exists | entityId=064329c0-66da-4754-8ca2-6565b2f03e39
+2026-06-08 17:27:06 [http-nio-9329-exec-5] ERROR dblogger - DB check – entity metadata duplicate | entityId=064329c0-66da-4754-8ca2-6565b2f03e39
+2026-06-08 17:46:47 [http-nio-9329-exec-6] INFO  dblogger - DB select – querying entity metadata with filters | orgId=null entityId=null
+2026-06-08 17:46:47 [http-nio-9329-exec-6] INFO  dblogger - DB select – entity metadata query complete | totalElements=4

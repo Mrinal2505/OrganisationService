@@ -45,9 +45,10 @@ public class Entitymetadatacontroller {
             @RequestParam(required = false)    String sortDirection,
             @RequestParam(required = false)    String search,
             @RequestParam(required = false)    UUID organisationId,
-            @RequestParam(required = false)    UUID entityId
+            @RequestParam(required = false)    String entityType,
+            @RequestParam(required = false)    Boolean isActive
     ) {
-        return service.getAll(page, size, sortBy, sortDirection, search, organisationId, entityId);
+        return service.getAll(page, size, sortBy, sortDirection, search, organisationId, entityType, isActive);
     }
 
     @Operation(summary = "Get entity metadata by ID", description = "Fetch a single entity metadata record by ID")
@@ -56,16 +57,16 @@ public class Entitymetadatacontroller {
         return service.getById(id);
     }
 
-    @Operation(summary = "Get metadata by entity", description = "Fetch all metadata records belonging to a specific entity")
-    @GetMapping("/entity/{entityId}")
-    public ResponseEntity<?> getByEntityId(@PathVariable UUID entityId) {
-        return service.getByEntityId(entityId);
-    }
-
     @Operation(summary = "Get metadata by organisation", description = "Fetch all metadata records belonging to a specific organisation")
     @GetMapping("/org/{organisationId}")
     public ResponseEntity<?> getByOrganisationId(@PathVariable UUID organisationId) {
         return service.getByOrganisationId(organisationId);
+    }
+
+    @Operation(summary = "Get metadata by entity type", description = "Fetch all metadata records of a specific entity type")
+    @GetMapping("/type/{entityType}")
+    public ResponseEntity<?> getByEntityType(@PathVariable String entityType) {
+        return service.getByEntityType(entityType);
     }
 
     @Operation(summary = "Update entity metadata", description = "Update an existing entity metadata record by ID")

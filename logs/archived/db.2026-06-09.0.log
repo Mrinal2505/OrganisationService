@@ -1,0 +1,134 @@
+2026-06-09 13:07:06 [http-nio-9329-exec-4] INFO  dblogger - DB check – organisation existence | email=admin@htitech.com
+2026-06-09 13:07:07 [http-nio-9329-exec-4] INFO  dblogger - DB insert – saving organisation | name=HTI Technologies
+2026-06-09 13:07:07 [http-nio-9329-exec-4] INFO  dblogger - DB insert – organisation saved successfully | id=8c14b740-f829-47e1-bca8-98606d0e68d2
+2026-06-09 13:08:11 [http-nio-9329-exec-7] INFO  dblogger - DB select – fetching organisation by id | id=8c14b740-f829-47e1-bca8-98606d0e68d2
+2026-06-09 13:08:11 [http-nio-9329-exec-7] INFO  dblogger - DB select – organisation fetched successfully | id=8c14b740-f829-47e1-bca8-98606d0e68d2
+2026-06-09 13:14:11 [http-nio-9329-exec-6] INFO  dblogger - DB select – fetching organisation for update | id=8c14b740-f829-47e1-bca8-98606d0e68d2
+2026-06-09 13:14:11 [http-nio-9329-exec-6] INFO  dblogger - DB update – saving organisation | id=8c14b740-f829-47e1-bca8-98606d0e68d2
+2026-06-09 13:14:11 [http-nio-9329-exec-6] INFO  dblogger - DB update – organisation saved successfully | id=8c14b740-f829-47e1-bca8-98606d0e68d2
+2026-06-09 13:15:28 [http-nio-9329-exec-2] INFO  dblogger - DB select – fetching organisation for update | id=8c14b740-f829-47e1-bca8-98606d0e68d2
+2026-06-09 13:15:28 [http-nio-9329-exec-2] INFO  dblogger - DB update – saving organisation | id=8c14b740-f829-47e1-bca8-98606d0e68d2
+2026-06-09 13:15:28 [http-nio-9329-exec-2] INFO  dblogger - DB update – organisation saved successfully | id=8c14b740-f829-47e1-bca8-98606d0e68d2
+2026-06-09 13:16:30 [http-nio-9329-exec-4] INFO  dblogger - DB check – organisation exists | orgId=8c14b740-f829-47e1-bca8-98606d0e68d2
+2026-06-09 13:16:30 [http-nio-9329-exec-4] INFO  dblogger - DB check – entity metadata duplicate | orgId=8c14b740-f829-47e1-bca8-98606d0e68d2 entityType=Department
+2026-06-09 13:16:30 [http-nio-9329-exec-4] INFO  dblogger - DB insert – saving entity metadata | orgId=8c14b740-f829-47e1-bca8-98606d0e68d2 entityType=Department
+2026-06-09 13:16:30 [http-nio-9329-exec-4] INFO  dblogger - DB insert – entity metadata saved successfully | id=74b8c6a2-9dad-4b76-8a7c-2c6a7fb02ade
+2026-06-09 13:16:49 [http-nio-9329-exec-5] INFO  dblogger - DB select – querying entity metadata | orgId=null entityType=null isActive=null
+2026-06-09 13:16:50 [http-nio-9329-exec-5] INFO  dblogger - DB select – entity metadata query complete | totalElements=1
+2026-06-09 13:17:26 [http-nio-9329-exec-8] INFO  dblogger - DB select – fetching entity metadata by id | id=74b8c6a2-9dad-4b76-8a7c-2c6a7fb02ade
+2026-06-09 13:17:26 [http-nio-9329-exec-8] INFO  dblogger - DB select – entity metadata fetched successfully | id=74b8c6a2-9dad-4b76-8a7c-2c6a7fb02ade
+2026-06-09 13:17:50 [http-nio-9329-exec-7] INFO  dblogger - DB select – fetching entity metadata by orgId | orgId=8c14b740-f829-47e1-bca8-98606d0e68d2
+2026-06-09 13:17:50 [http-nio-9329-exec-7] INFO  dblogger - DB select – entity metadata fetched | orgId=8c14b740-f829-47e1-bca8-98606d0e68d2 count=1
+2026-06-09 13:18:29 [http-nio-9329-exec-9] INFO  dblogger - DB select – fetching entity metadata by entityType | entityType=Department
+2026-06-09 13:18:29 [http-nio-9329-exec-9] INFO  dblogger - DB select – entity metadata fetched | entityType=Department count=1
+2026-06-09 13:19:19 [http-nio-9329-exec-10] INFO  dblogger - DB select – querying entity metadata | orgId=null entityType=Department isActive=true
+2026-06-09 13:19:19 [http-nio-9329-exec-10] INFO  dblogger - DB select – entity metadata query complete | totalElements=1
+2026-06-09 13:21:03 [http-nio-9329-exec-1] INFO  dblogger - DB select – fetching entity metadata for update | id=74b8c6a2-9dad-4b76-8a7c-2c6a7fb02ade
+2026-06-09 13:21:03 [http-nio-9329-exec-1] INFO  dblogger - DB update – saving entity metadata | id=74b8c6a2-9dad-4b76-8a7c-2c6a7fb02ade
+2026-06-09 13:21:03 [http-nio-9329-exec-1] INFO  dblogger - DB update – entity metadata saved successfully | id=74b8c6a2-9dad-4b76-8a7c-2c6a7fb02ade
+2026-06-09 13:21:31 [http-nio-9329-exec-2] INFO  dblogger - DB select – fetching entity metadata for update | id=74b8c6a2-9dad-4b76-8a7c-2c6a7fb02ade
+2026-06-09 13:21:31 [http-nio-9329-exec-2] INFO  dblogger - DB update – saving entity metadata | id=74b8c6a2-9dad-4b76-8a7c-2c6a7fb02ade
+2026-06-09 13:21:31 [http-nio-9329-exec-2] INFO  dblogger - DB update – entity metadata saved successfully | id=74b8c6a2-9dad-4b76-8a7c-2c6a7fb02ade
+2026-06-09 13:23:37 [http-nio-9329-exec-4] INFO  dblogger - DB check – organisation exists | orgId=8c14b740-f829-47e1-bca8-98606d0e68d2
+2026-06-09 13:23:37 [http-nio-9329-exec-4] INFO  dblogger - DB insert – saving entity | orgId=8c14b740-f829-47e1-bca8-98606d0e68d2
+2026-06-09 13:23:37 [http-nio-9329-exec-4] INFO  dblogger - DB insert – entity saved successfully | id=23298143-1d94-4972-b127-4634af18c105
+2026-06-09 13:24:10 [http-nio-9329-exec-5] INFO  dblogger - DB select – querying entities | priority=null orgId=null isActive=null
+2026-06-09 13:24:10 [http-nio-9329-exec-5] INFO  dblogger - DB select – entities query complete | totalElements=1
+2026-06-09 13:24:53 [http-nio-9329-exec-8] INFO  dblogger - DB select – querying entities | priority=null orgId=null isActive=null
+2026-06-09 13:24:53 [http-nio-9329-exec-8] INFO  dblogger - DB select – entities query complete | totalElements=1
+2026-06-09 13:25:57 [http-nio-9329-exec-9] INFO  dblogger - DB select – fetching entity by id | id=23298143-1d94-4972-b127-4634af18c105
+2026-06-09 13:25:57 [http-nio-9329-exec-9] INFO  dblogger - DB select – entity fetched successfully | id=23298143-1d94-4972-b127-4634af18c105
+2026-06-09 13:26:26 [http-nio-9329-exec-10] INFO  dblogger - DB select – fetching entities by orgId | orgId=8c14b740-f829-47e1-bca8-98606d0e68d2
+2026-06-09 13:26:26 [http-nio-9329-exec-10] INFO  dblogger - DB select – entities fetched | orgId=8c14b740-f829-47e1-bca8-98606d0e68d2 count=1
+2026-06-09 13:26:56 [http-nio-9329-exec-6] INFO  dblogger - DB select – querying entities | priority=null orgId=null isActive=true
+2026-06-09 13:26:56 [http-nio-9329-exec-6] INFO  dblogger - DB select – entities query complete | totalElements=1
+2026-06-09 13:27:52 [http-nio-9329-exec-1] INFO  dblogger - DB select – attribute search | orgId=8c14b740-f829-47e1-bca8-98606d0e68d2 key=manager value=John Doe
+2026-06-09 13:27:52 [http-nio-9329-exec-1] INFO  dblogger - DB select – attribute search complete | key=manager value=John Doe count=1
+2026-06-09 13:28:36 [http-nio-9329-exec-2] INFO  dblogger - DB select – fetching entity for meta link | id=23298143-1d94-4972-b127-4634af18c105
+2026-06-09 13:28:36 [http-nio-9329-exec-2] INFO  dblogger - DB check – verifying meta_id exists | metaId=74b8c6a2-9dad-4b76-8a7c-2c6a7fb02ade
+2026-06-09 13:28:36 [http-nio-9329-exec-2] INFO  dblogger - DB update – linking meta to entity | id=23298143-1d94-4972-b127-4634af18c105 metaId=74b8c6a2-9dad-4b76-8a7c-2c6a7fb02ade
+2026-06-09 13:28:36 [http-nio-9329-exec-2] INFO  dblogger - DB update – meta linked successfully | id=23298143-1d94-4972-b127-4634af18c105 metaId=74b8c6a2-9dad-4b76-8a7c-2c6a7fb02ade
+2026-06-09 13:29:13 [http-nio-9329-exec-3] INFO  dblogger - DB select – fetching entity by id | id=23298143-1d94-4972-b127-4634af18c105
+2026-06-09 13:29:13 [http-nio-9329-exec-3] INFO  dblogger - DB select – entity fetched successfully | id=23298143-1d94-4972-b127-4634af18c105
+2026-06-09 13:31:24 [http-nio-9329-exec-5] INFO  dblogger - DB select – fetching entity for update | id=23298143-1d94-4972-b127-4634af18c105
+2026-06-09 13:31:24 [http-nio-9329-exec-5] INFO  dblogger - DB update – saving entity | id=23298143-1d94-4972-b127-4634af18c105
+2026-06-09 13:31:24 [http-nio-9329-exec-5] INFO  dblogger - DB update – entity saved successfully | id=23298143-1d94-4972-b127-4634af18c105
+2026-06-09 13:33:19 [http-nio-9329-exec-7] INFO  dblogger - DB check – organisation exists | orgId=8c14b740-f829-47e1-bca8-98606d0e68d2
+2026-06-09 13:33:19 [http-nio-9329-exec-7] INFO  dblogger - DB check – entity metadata duplicate | orgId=8c14b740-f829-47e1-bca8-98606d0e68d2 entityType=Department
+2026-06-09 13:33:19 [http-nio-9329-exec-7] ERROR dblogger - DB check – entity metadata duplicate | orgId=8c14b740-f829-47e1-bca8-98606d0e68d2 entityType=Department
+2026-06-09 13:43:19 [http-nio-9329-exec-9] INFO  dblogger - DB select – fetching entity metadata for update | id=74b8c6a2-9dad-4b76-8a7c-2c6a7fb02ade
+2026-06-09 13:43:19 [http-nio-9329-exec-9] INFO  dblogger - DB update – saving entity metadata | id=74b8c6a2-9dad-4b76-8a7c-2c6a7fb02ade
+2026-06-09 13:43:19 [http-nio-9329-exec-9] INFO  dblogger - DB update – entity metadata saved successfully | id=74b8c6a2-9dad-4b76-8a7c-2c6a7fb02ade
+2026-06-09 13:48:10 [http-nio-9329-exec-6] INFO  dblogger - DB select – querying entity metadata | orgId=null entityType=Department isActive=true
+2026-06-09 13:48:10 [http-nio-9329-exec-6] INFO  dblogger - DB select – entity metadata query complete | totalElements=1
+2026-06-09 15:17:41 [http-nio-9329-exec-9] INFO  dblogger - DB select – querying entities | priority=null orgId=null isActive=null
+2026-06-09 15:17:41 [http-nio-9329-exec-9] INFO  dblogger - DB select – entities query complete | totalElements=1
+2026-06-09 15:21:08 [http-nio-9329-exec-6] INFO  dblogger - DB select – querying entity metadata | orgId=null entityType=null isActive=null
+2026-06-09 15:21:08 [http-nio-9329-exec-6] INFO  dblogger - DB select – entity metadata query complete | totalElements=1
+2026-06-09 15:28:23 [http-nio-9329-exec-7] INFO  dblogger - DB select – fetching organisation by id | id=8c14b740-f829-47e1-bca8-98606d0e68d2
+2026-06-09 15:28:23 [http-nio-9329-exec-7] INFO  dblogger - DB select – organisation fetched successfully | id=8c14b740-f829-47e1-bca8-98606d0e68d2
+2026-06-09 15:33:49 [http-nio-9329-exec-4] INFO  dblogger - DB check – organisation existence | email=admin913845@zenithdigitalventures2026.com
+2026-06-09 15:33:49 [http-nio-9329-exec-4] INFO  dblogger - DB insert – saving organisation | name=Zenith Digital Ventures Pvt Ltd
+2026-06-09 15:33:49 [http-nio-9329-exec-4] INFO  dblogger - DB insert – organisation saved successfully | id=b13f18da-2e07-461c-90cc-493a08154853
+2026-06-09 15:40:41 [http-nio-9329-exec-5] INFO  dblogger - DB check – organisation existence | email=admin784512@nimbusanalytics2026.com
+2026-06-09 15:40:41 [http-nio-9329-exec-5] INFO  dblogger - DB insert – saving organisation | name=Nimbus Analytics Solutions Pvt Ltd
+2026-06-09 15:40:41 [http-nio-9329-exec-5] INFO  dblogger - DB insert – organisation saved successfully | id=c21c37d1-662b-4f3a-a1c2-a14fd1d9a6c2
+2026-06-09 15:41:20 [http-nio-9329-exec-7] INFO  dblogger - DB check – organisation exists | orgId=c21c37d1-662b-4f3a-a1c2-a14fd1d9a6c2
+2026-06-09 15:41:20 [http-nio-9329-exec-7] INFO  dblogger - DB check – entity metadata duplicate | orgId=c21c37d1-662b-4f3a-a1c2-a14fd1d9a6c2 entityType=Department
+2026-06-09 15:41:20 [http-nio-9329-exec-7] INFO  dblogger - DB insert – saving entity metadata | orgId=c21c37d1-662b-4f3a-a1c2-a14fd1d9a6c2 entityType=Department
+2026-06-09 15:41:20 [http-nio-9329-exec-7] INFO  dblogger - DB insert – entity metadata saved successfully | id=78332b10-0188-4a9e-9d4c-9662e5876359
+2026-06-09 15:54:15 [http-nio-9329-exec-9] INFO  dblogger - DB check – organisation exists | orgId=c21c37d1-662b-4f3a-a1c2-a14fd1d9a6c2
+2026-06-09 15:54:15 [http-nio-9329-exec-9] INFO  dblogger - DB check – entity metadata duplicate | orgId=c21c37d1-662b-4f3a-a1c2-a14fd1d9a6c2 entityType=Department
+2026-06-09 15:54:15 [http-nio-9329-exec-9] ERROR dblogger - DB check – entity metadata duplicate | orgId=c21c37d1-662b-4f3a-a1c2-a14fd1d9a6c2 entityType=Department
+2026-06-09 15:54:48 [http-nio-9329-exec-10] INFO  dblogger - DB select – querying entity metadata | orgId=null entityType=null isActive=null
+2026-06-09 15:54:48 [http-nio-9329-exec-10] INFO  dblogger - DB select – entity metadata query complete | totalElements=2
+2026-06-09 15:58:51 [http-nio-9329-exec-2] INFO  dblogger - DB check – organisation exists | orgId=c21c37d1-662b-4f3a-a1c2-a14fd1d9a6c2
+2026-06-09 15:58:51 [http-nio-9329-exec-2] INFO  dblogger - DB insert – saving entity | orgId=c21c37d1-662b-4f3a-a1c2-a14fd1d9a6c2
+2026-06-09 15:58:51 [http-nio-9329-exec-2] INFO  dblogger - DB insert – entity saved successfully | id=35154c35-528c-4a85-83a9-03a28743dda5
+2026-06-09 15:59:50 [http-nio-9329-exec-3] INFO  dblogger - DB select – fetching entity for meta link | id=c21c37d1-662b-4f3a-a1c2-a14fd1d9a6c2
+2026-06-09 15:59:50 [http-nio-9329-exec-3] ERROR dblogger - DB select – entity not found | id=c21c37d1-662b-4f3a-a1c2-a14fd1d9a6c2
+2026-06-09 16:00:35 [http-nio-9329-exec-4] INFO  dblogger - DB select – fetching entity for meta link | id=35154c35-528c-4a85-83a9-03a28743dda5
+2026-06-09 16:00:35 [http-nio-9329-exec-4] INFO  dblogger - DB check – verifying meta_id exists | metaId=78332b10-0188-4a9e-9d4c-9662e5876359
+2026-06-09 16:00:35 [http-nio-9329-exec-4] INFO  dblogger - DB update – linking meta to entity | id=35154c35-528c-4a85-83a9-03a28743dda5 metaId=78332b10-0188-4a9e-9d4c-9662e5876359
+2026-06-09 16:00:35 [http-nio-9329-exec-4] INFO  dblogger - DB update – meta linked successfully | id=35154c35-528c-4a85-83a9-03a28743dda5 metaId=78332b10-0188-4a9e-9d4c-9662e5876359
+2026-06-09 16:04:26 [http-nio-9329-exec-5] INFO  dblogger - DB select – querying entities | priority=null orgId=null isActive=null
+2026-06-09 16:04:26 [http-nio-9329-exec-5] INFO  dblogger - DB select – entities query complete | totalElements=2
+2026-06-09 16:08:13 [http-nio-9329-exec-8] INFO  dblogger - DB check – organisation existence | email=admin562913@vertexcloudsystems2026.com
+2026-06-09 16:08:13 [http-nio-9329-exec-8] INFO  dblogger - DB insert – saving organisation | name=Vertex Cloud Systems Pvt Ltd
+2026-06-09 16:08:13 [http-nio-9329-exec-8] INFO  dblogger - DB insert – organisation saved successfully | id=9ccb0a6d-6264-498e-b03a-0ee6f4c826d0
+2026-06-09 16:08:58 [http-nio-9329-exec-9] INFO  dblogger - DB select – fetching organisation for delete | id=9ccb0a6d-6264-498e-b03a-0ee6f4c826d0
+2026-06-09 16:08:58 [http-nio-9329-exec-9] INFO  dblogger - DB delete – removing organisation | id=9ccb0a6d-6264-498e-b03a-0ee6f4c826d0
+2026-06-09 16:08:58 [http-nio-9329-exec-9] INFO  dblogger - DB delete – organisation removed successfully | id=9ccb0a6d-6264-498e-b03a-0ee6f4c826d0
+2026-06-09 16:09:15 [http-nio-9329-exec-10] INFO  dblogger - DB select – fetching organisation by id | id=9ccb0a6d-6264-498e-b03a-0ee6f4c826d0
+2026-06-09 16:09:15 [http-nio-9329-exec-10] ERROR dblogger - DB select – organisation not found | id=9ccb0a6d-6264-498e-b03a-0ee6f4c826d0
+2026-06-09 16:22:06 [http-nio-9329-exec-6] INFO  dblogger - DB check – organisation existence | email=admin847261@aurorafintech2026.com
+2026-06-09 16:22:06 [http-nio-9329-exec-6] INFO  dblogger - DB insert – saving organisation | name=Aurora Fintech Innovations Pvt Ltd
+2026-06-09 16:22:06 [http-nio-9329-exec-6] INFO  dblogger - DB insert – organisation saved successfully | id=1eb17e93-9379-4ccd-a01d-21287071ef8c
+2026-06-09 16:23:23 [http-nio-9329-exec-7] INFO  dblogger - DB select – fetching organisation for update | id=1eb17e93-9379-4ccd-a01d-21287071ef8c
+2026-06-09 16:23:23 [http-nio-9329-exec-7] INFO  dblogger - DB update – saving organisation | id=1eb17e93-9379-4ccd-a01d-21287071ef8c
+2026-06-09 16:23:23 [http-nio-9329-exec-7] INFO  dblogger - DB update – organisation saved successfully | id=1eb17e93-9379-4ccd-a01d-21287071ef8c
+2026-06-09 16:23:52 [http-nio-9329-exec-8] INFO  dblogger - DB select – fetching organisation by id | id=1eb17e93-9379-4ccd-a01d-21287071ef8c
+2026-06-09 16:23:52 [http-nio-9329-exec-8] INFO  dblogger - DB select – organisation fetched successfully | id=1eb17e93-9379-4ccd-a01d-21287071ef8c
+2026-06-09 16:24:12 [http-nio-9329-exec-9] INFO  dblogger - DB select – fetching organisation for soft delete | id=1eb17e93-9379-4ccd-a01d-21287071ef8c
+2026-06-09 16:24:12 [http-nio-9329-exec-9] INFO  dblogger - DB update – soft deleting organisation | id=1eb17e93-9379-4ccd-a01d-21287071ef8c
+2026-06-09 16:24:12 [http-nio-9329-exec-9] INFO  dblogger - DB update – organisation soft deleted successfully | id=1eb17e93-9379-4ccd-a01d-21287071ef8c
+2026-06-09 16:24:27 [http-nio-9329-exec-10] INFO  dblogger - DB select – fetching organisation by id | id=1eb17e93-9379-4ccd-a01d-21287071ef8c
+2026-06-09 16:24:27 [http-nio-9329-exec-10] ERROR dblogger - DB select – organisation is soft deleted | id=1eb17e93-9379-4ccd-a01d-21287071ef8c
+2026-06-09 16:44:19 [http-nio-9329-exec-1] INFO  dblogger - DB select – fetching organisation by id | id=1eb17e93-9379-4ccd-a01d-21287071ef8c
+2026-06-09 16:44:19 [http-nio-9329-exec-1] ERROR dblogger - DB select – organisation is soft deleted | id=1eb17e93-9379-4ccd-a01d-21287071ef8c
+2026-06-09 16:44:31 [http-nio-9329-exec-5] INFO  dblogger - DB select – fetching organisation by id | id=1eb17e93-9379-4ccd-a01d-21287071ef8c
+2026-06-09 16:44:31 [http-nio-9329-exec-5] ERROR dblogger - DB select – organisation is soft deleted | id=1eb17e93-9379-4ccd-a01d-21287071ef8c
+2026-06-09 16:45:06 [http-nio-9329-exec-6] INFO  dblogger - DB select – fetching organisation by id | id=b13f18da-2e07-461c-90cc-493a08154853
+2026-06-09 16:45:06 [http-nio-9329-exec-6] INFO  dblogger - DB select – organisation fetched successfully | id=b13f18da-2e07-461c-90cc-493a08154853
+2026-06-09 16:45:06 [http-nio-9329-exec-3] INFO  dblogger - DB select – fetching organisation by id | id=b13f18da-2e07-461c-90cc-493a08154853
+2026-06-09 16:45:06 [http-nio-9329-exec-3] INFO  dblogger - DB select – organisation fetched successfully | id=b13f18da-2e07-461c-90cc-493a08154853
+2026-06-09 16:48:59 [http-nio-9329-exec-8] INFO  dblogger - DB select – fetching organisation for update | id=8c14b740-f829-47e1-bca8-98606d0e68d2
+2026-06-09 16:48:59 [http-nio-9329-exec-8] INFO  dblogger - DB update – saving organisation | id=8c14b740-f829-47e1-bca8-98606d0e68d2
+2026-06-09 16:48:59 [http-nio-9329-exec-8] INFO  dblogger - DB update – organisation saved successfully | id=8c14b740-f829-47e1-bca8-98606d0e68d2
+2026-06-09 16:49:24 [http-nio-9329-exec-9] INFO  dblogger - DB select – fetching organisation for update | id=8c14b740-f829-47e1-bca8-98606d0e68d2
+2026-06-09 16:49:24 [http-nio-9329-exec-9] INFO  dblogger - DB update – saving organisation | id=8c14b740-f829-47e1-bca8-98606d0e68d2
+2026-06-09 16:49:24 [http-nio-9329-exec-9] INFO  dblogger - DB update – organisation saved successfully | id=8c14b740-f829-47e1-bca8-98606d0e68d2
+2026-06-09 16:50:10 [http-nio-9329-exec-1] INFO  dblogger - DB select – fetching organisation by id | id=8c14b740-f829-47e1-bca8-98606d0e68d2
+2026-06-09 16:50:10 [http-nio-9329-exec-1] INFO  dblogger - DB select – organisation fetched successfully | id=8c14b740-f829-47e1-bca8-98606d0e68d2
+2026-06-09 17:06:36 [http-nio-9329-exec-10] INFO  dblogger - DB select – fetching organisation by id | id=8c14b740-f829-47e1-bca8-98606d0e68d2
+2026-06-09 17:06:36 [http-nio-9329-exec-10] INFO  dblogger - DB select – organisation fetched successfully | id=8c14b740-f829-47e1-bca8-98606d0e68d2

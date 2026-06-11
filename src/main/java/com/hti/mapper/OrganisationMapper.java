@@ -10,9 +10,9 @@ public class OrganisationMapper {
     public static OrganisationResponse toResponse(organisation org) {
         return OrganisationResponse.builder()
                 .id(org.getId())
-                .organizationName(org.getOrganizationName())
+                .organisationName(org.getOrganisationName())
                 .domain(org.getDomain())
-                .organizationType(org.getOrganizationType())
+                .organisationType(org.getOrganisationType())
                 .companyRegistrationNumber(org.getCompanyRegistrationNumber())
                 .websiteUrl(org.getWebsiteUrl())
                 .logoUrl(org.getLogoUrl())
@@ -25,6 +25,11 @@ public class OrganisationMapper {
                 .country(org.getCountry())
                 .postalCode(org.getPostalCode())
                 .timezone(org.getTimezone())
+                .numberOfEmployees(org.getNumberOfEmployees())
+                .isActive(org.isActive())
+                .deletedAt(org.getDeletedAt())
+                .createdBy(org.getCreatedBy())
+                .updatedBy(org.getUpdatedBy())
                 .createdAt(org.getCreatedAt())
                 .updatedAt(org.getUpdatedAt())
                 .build();

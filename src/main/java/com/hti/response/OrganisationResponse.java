@@ -16,9 +16,9 @@ import lombok.Setter;
 @Builder
 public class OrganisationResponse {
     private UUID id;
-    private String organizationName;
+    private String organisationName;
     private String domain;
-    private String organizationType;
+    private String organisationType;
     private String companyRegistrationNumber;
     private String websiteUrl;
     private String logoUrl;
@@ -31,6 +31,11 @@ public class OrganisationResponse {
     private String country;
     private String postalCode;
     private String timezone;
+    private Integer numberOfEmployees;
+    private boolean isActive;
+    private LocalDateTime deletedAt;
+    private String createdBy;
+    private String updatedBy;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

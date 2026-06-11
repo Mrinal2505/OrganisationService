@@ -13,16 +13,19 @@ public class OrganisationSpecification {
 
     private OrganisationSpecification() {}
 
-    public static Specification<organisation> buildSpec(String search, String organizationType,
-            String industryType, String city, String state, String country) {
+    public static Specification<organisation> buildSpec(String search, String organisationType,
+            String industryType, String city, String state, String country, Boolean isActive) {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
+
+            // Always exclude soft-deleted records
+            predicates.add(cb.isNull(root.get("deletedAt")));
 
             if (search != null && !search.isBlank()) {
                 String like = "%" + search.toLowerCase() + "%";
                 predicates.add(cb.or(
                         cb.like(cb.lower(root.get("companyRegistrationNumber")), like),
-                        cb.like(cb.lower(root.get("organizationName")), like),
+                        cb.like(cb.lower(root.get("organisationName")), like),
                         cb.like(cb.lower(root.get("domain")), like),
                         cb.like(cb.lower(root.get("email")), like),
                         cb.like(cb.lower(root.get("phone")), like),
@@ -30,8 +33,8 @@ public class OrganisationSpecification {
                         cb.like(cb.lower(root.get("state")), like),
                         cb.like(cb.lower(root.get("country")), like)));
             }
-            if (organizationType != null && !organizationType.isBlank())
-                predicates.add(cb.equal(cb.lower(root.get("organizationType")), organizationType.toLowerCase()));
+            if (organisationType != null && !organisationType.isBlank())
+                predicates.add(cb.equal(cb.lower(root.get("organisationType")), organisationType.toLowerCase()));
             if (industryType != null && !industryType.isBlank())
                 predicates.add(cb.equal(cb.lower(root.get("industryType")), industryType.toLowerCase()));
             if (city != null && !city.isBlank())
@@ -40,6 +43,8 @@ public class OrganisationSpecification {
                 predicates.add(cb.equal(cb.lower(root.get("state")), state.toLowerCase()));
             if (country != null && !country.isBlank())
                 predicates.add(cb.equal(cb.lower(root.get("country")), country.toLowerCase()));
+            if (isActive != null)
+                predicates.add(cb.equal(root.get("isActive"), isActive));
 
             return cb.and(predicates.toArray(new Predicate[0]));
         };

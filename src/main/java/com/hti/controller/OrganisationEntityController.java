@@ -28,14 +28,15 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/entities")
 @RequiredArgsConstructor
 public class OrganisationEntityController {
+
     private final OrganisationEntityService service;
-    @Operation(summary = "Create entity", description = "Creates a new organisation entity")
-    @PostMapping()
+
+    @Operation(summary = "Create entity", description = "Creates a new organisation entity — validates attributes strictly against metadata template")
+    @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody OrganisationEntityRequest request) {
         return service.create(request);
     }
-    
-    
+
     @Operation(summary = "Get all entities", description = "Fetch paginated list of entities with optional filters")
     @GetMapping
     public ResponseEntity<?> getAll(
@@ -44,11 +45,11 @@ public class OrganisationEntityController {
             @RequestParam(required = false)    String sortBy,
             @RequestParam(required = false)    String sortDirection,
             @RequestParam(required = false)    String search,
-            @RequestParam(required = false)    String entityType,
             @RequestParam(required = false)    Integer priority,
-            @RequestParam(required = false)    UUID organisationId
+            @RequestParam(required = false)    UUID organisationId,
+            @RequestParam(required = false)    Boolean isActive
     ) {
-        return service.getAll(page, size, sortBy, sortDirection, search, entityType, priority, organisationId);
+        return service.getAll(page, size, sortBy, sortDirection, search, priority, organisationId, isActive);
     }
 
     @Operation(summary = "Get entity by ID", description = "Fetch a single entity by ID")
@@ -63,12 +64,6 @@ public class OrganisationEntityController {
         return service.getByOrganisation(organisationId);
     }
 
-    @Operation(summary = "Get entities by type", description = "Fetch all entities of a specific type")
-    @GetMapping("/type/{entityType}")
-    public ResponseEntity<?> getByEntityType(@PathVariable String entityType) {
-        return service.getByEntityType(entityType);
-    }
-
     @Operation(summary = "Search by attribute", description = "Search entities by a specific attribute key-value pair")
     @GetMapping("/org/{organisationId}/search")
     public ResponseEntity<?> searchByAttribute(
@@ -78,7 +73,7 @@ public class OrganisationEntityController {
         return service.searchByAttribute(organisationId, key, value);
     }
 
-    @Operation(summary = "Update entity", description = "Update an existing entity by ID")
+    @Operation(summary = "Update entity", description = "Update an existing entity — re-validates attributes against metadata template if provided")
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> update(
             @PathVariable UUID id,
